@@ -1,0 +1,15 @@
+{
+  "stepDefinitions": [
+    "cypress/step_definitions/shared/*.steps.ts",
+    "cypress/step_definitions/ui/*.steps.ts",
+    "cypress/step_definitions/api/*.steps.ts"
+  ],
+  "filterSpecs": true,
+  "omitFiltered": true,
+  "json": {
+    "enabled": false
+  },
+  "messages": {
+    "enabled": false
+  }
+}

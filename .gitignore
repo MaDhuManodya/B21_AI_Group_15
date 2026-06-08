@@ -1,0 +1,15 @@
+node_modules/
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+reports/
+allure-results/
+allure-report/
+.env
+.env.local
+.idea/
+.vscode/
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db

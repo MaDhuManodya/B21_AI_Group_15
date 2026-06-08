@@ -1,0 +1,28 @@
+{
+  "name": "qa-training-cypress",
+  "version": "1.0.0",
+  "private": true,
+  "description": "QA Training App - Cypress + Cucumber + Allure (TypeScript) automation suite for IS3440 group assignment",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:ui": "cypress run --spec \"cypress/e2e/ui/**/*.feature\"",
+    "cy:run:api": "cypress run --spec \"cypress/e2e/api/**/*.feature\"",
+    "cy:run:smoke": "cypress run --env tags=@smoke",
+    "cy:run:tharindu": "cypress run --env tags=@tharindu",
+    "allure:generate": "allure generate reports/allure-results --clean -o reports/allure-report",
+    "allure:open": "allure open reports/allure-report",
+    "report": "npm run allure:generate && npm run allure:open",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.1.2",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.2",
+    "@shelex/cypress-allure-plugin": "^2.40.2",
+    "@types/node": "^20.11.0",
+    "allure-commandline": "^2.27.0",
+    "cypress": "^13.6.4",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.3"
+  }
+}

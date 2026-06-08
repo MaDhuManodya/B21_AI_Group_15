@@ -1,0 +1,19 @@
+{
+  "category": {
+    "valid": { "name": "Indoor", "parentId": null },
+    "subValid": { "name": "Succulent", "parentId": 1 },
+    "tooShort": { "name": "AB" },
+    "tooLong": { "name": "ThisCategoryNameIsTooLong" }
+  },
+  "plant": {
+    "valid": { "name": "Rose", "categoryId": 2, "price": 150.0, "quantity": 10 },
+    "updatedValid": { "name": "Updated Rose", "categoryId": 2, "price": 200.0, "quantity": 25 },
+    "negativePrice": { "name": "BadPlant", "categoryId": 2, "price": -50.0, "quantity": 5 },
+    "tooShortName": { "name": "Ab", "categoryId": 2, "price": 10.0, "quantity": 1 },
+    "tooLongName": { "name": "AbcdefghijklmnopqrstuvwxyZ", "categoryId": 2, "price": 10.0, "quantity": 1 }
+  },
+  "sale": {
+    "valid": { "plantId": 1, "quantity": 2 },
+    "zeroQuantity": { "plantId": 1, "quantity": 0 }
+  }
+}
