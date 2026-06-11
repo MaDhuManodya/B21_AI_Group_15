@@ -24,6 +24,9 @@ export const categoriesApi = {
   list: (auth: Record<string, string>, qs?: { page?: number; size?: number; search?: string; parentId?: number }) =>
     apiClient.get<CategoryDto[] | { content: CategoryDto[] }>('/api/categories', qs, auth),
 
+  getSummary: (auth: Record<string, string>) =>
+    apiClient.get<{ mainCategories: number; subCategories: number }>('/api/categories/summary', undefined, auth),
+
   // TODO Manodya
   getOne: (auth: Record<string, string>, id: number) =>
     apiClient.get<CategoryDto>(`/api/categories/${id}`, undefined, auth),

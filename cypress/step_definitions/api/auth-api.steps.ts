@@ -22,4 +22,6 @@ Then('the auth API response status should be {int}', (status: number) => {
 Then('the response should contain a valid JWT token', () => {
   expect(lastResponse?.body).to.have.property('token');
   expect(lastResponse?.body.token).to.be.a('string');
+  expect(lastResponse?.body).to.have.property('tokenType');
+  expect(lastResponse?.body.tokenType).to.eq('Bearer');
 });

@@ -45,3 +45,13 @@ Then('the category API response status should be {int}', (status: number) => {
 });
 
 // TODO Manodya / Malinda: add domain-specific Then steps as you need them.
+
+When('I GET the categories summary', () => {
+  categoriesApi.getSummary(authHeader).then((r) => { lastResponse = r; });
+});
+
+Then('the category API response should have {int} main categories and {int} sub categories', (expectedMain: number, expectedSub: number) => {
+  expect(lastResponse?.status).to.eq(200);
+  expect((lastResponse?.body as any).mainCategories).to.eq(expectedMain);
+  expect((lastResponse?.body as any).subCategories).to.eq(expectedSub);
+});
