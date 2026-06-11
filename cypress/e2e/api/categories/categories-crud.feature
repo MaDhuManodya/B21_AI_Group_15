@@ -13,7 +13,7 @@ Feature: Categories API
   @admin
   Scenario: API_CATEGORY_ADMIN_002 - Verify Admin can create category using API
     Given I have "admin" API credentials for categories
-    When I POST a new category with name "ApiCategoryTest"
+    When I POST a new category with name "ApiCatTest"
     Then the category API response status should be 201
 
   @admin
@@ -26,7 +26,7 @@ Feature: Categories API
   @admin
   Scenario: API_CATEGORY_ADMIN_004 - Verify Admin can update category using API
     Given I have "admin" API credentials for categories
-    When I PUT category 1 with name "UpdatedApiCategory"
+    When I PUT category 1 with name "UpdCatTest"
     Then the category API response status should be 200
 
   @admin
@@ -61,7 +61,7 @@ Feature: Categories API
   @user @negative @rbac
   Scenario: API_CATEGORY_USER_005 - Verify User cannot update or delete category using API
     Given I have "user" API credentials for categories
-    When I PUT category 1 with name "UserCatUpdate"
+    When I PUT category 1 with name "UserUpdate"
     Then the category API response status should be 403
     When I DELETE category 1
     Then the category API response status should be 403
