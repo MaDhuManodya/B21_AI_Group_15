@@ -1,0 +1,81 @@
+{
+  // ============================================================
+  // Cucumber (Gherkin) Full Support — alexkrechik.cucumberautocomplete
+  // Provides: step autocomplete, Ctrl+Click jump-to-definition,
+  //           "undefined step" diagnostics, smart snippet generation.
+  // ============================================================
+
+  // Where the extension looks for step definition files.
+  // Each glob is resolved relative to the workspace root.
+  "cucumberautocomplete.steps": [
+    "cypress/step_definitions/shared/*.steps.ts",
+    "cypress/step_definitions/ui/*.steps.ts",
+    "cypress/step_definitions/api/*.steps.ts"
+  ],
+
+  // Where the extension looks for .feature files.
+  // Drives the "Run sync" command and the unused-step diagnostics.
+  "cucumberautocomplete.syncfeatures": "cypress/e2e/**/*.feature",
+
+  // false = allow Given/When/Then steps to be re-used across keywords
+  //         (e.g., "Given I navigate to ..." can also be "When I navigate to ...").
+  // true  = stricter Cucumber-spec matching.
+  "cucumberautocomplete.strictGherkinCompletion": false,
+
+  // Validate that Given/When/Then are placed correctly in feature files.
+  "cucumberautocomplete.strictGherkinValidation": false,
+
+  // When you type a step that has no matching definition, the extension
+  // offers a "Create new step" snippet that inserts a TypeScript stub.
+  "cucumberautocomplete.smartSnippets": true,
+
+  // Allow multiple alternative step phrasings for a single definition
+  // (e.g., "I (open|navigate to) the page").
+  "cucumberautocomplete.stepsInvariants": true,
+
+  // Skip docstring/data-table formatting (we don't use either heavily).
+  "cucumberautocomplete.skipDocStringsFormat": true,
+
+  // Treat custom Cucumber-Expression parameter types if you ever add any
+  // via defineParameterType(). Left empty for now.
+  "cucumberautocomplete.customParameters": [],
+
+  // ============================================================
+  // Per-language editor settings
+  // ============================================================
+  "[feature]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": false,
+    "editor.wordWrap": "on"
+  },
+  "[typescript]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": false
+  },
+
+  // File associations — make sure VS Code recognises Cucumber files.
+  "files.associations": {
+    "*.feature": "feature",
+    ".cypress-cucumber-preprocessorrc.json": "jsonc"
+  },
+
+  // Hide build artifacts and reports from the explorer to keep it tidy.
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/reports/allure-results": true,
+    "**/reports/allure-report": true,
+    "**/cypress/screenshots": true,
+    "**/cypress/videos": true
+  },
+
+  // Search performance — skip generated folders.
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/reports": true,
+    "**/cypress/screenshots": true,
+    "**/cypress/videos": true,
+    "package-lock.json": true
+  }
+}
