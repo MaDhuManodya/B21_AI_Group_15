@@ -14,6 +14,12 @@
 @malinda @categories @ui
 Feature: Category Update
 
-  # TODO Malinda: implement Edit Category scenarios here.
-  # Suggested IDs: UI_CATEGORY_ADMIN_001 (update success), UI_CATEGORY_ADMIN_002 (name length 3-10),
-  #                UI_CATEGORY_USER_001 (403 on /ui/categories/edit/{id}).
+  @admin @smoke
+  Scenario: UI_PLANT_ADMIN_007 - Verify Admin can edit an existing category with valid data
+    Given I am logged in as "admin"
+    When I open the edit category page for id 8
+    And I update the category name to "Outdoor"
+    And I save the category form
+    Then I should see the "Category updated successfully" success message
+    And I should be redirected to "/ui/categories"
+    And I should see "Outdoor" on the category page

@@ -23,5 +23,13 @@ Then('I should see the plant form success alert', () => {
   form.successAlert().should('be.visible');
 });
 
-// TODO Malinda: add scenarios for required-field validation, name length 3-25,
-// price > 0, quantity >= 0, and User -> 403 on /ui/plants/add.
+Then('I should see the {string} error message below the price field in red', (errorMsg: string) => {
+  form.priceError()
+    .should('be.visible')
+    .and('contain.text', errorMsg)
+    .and('have.css', 'color', 'rgb(255, 0, 0)'); // Assuming red text color
+});
+
+Then('the plant should not be created', () => {
+  cy.url().should('include', '/ui/plants/add'); // Should stay on the same page
+});

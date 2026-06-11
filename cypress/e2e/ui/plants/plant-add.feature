@@ -15,6 +15,14 @@
 @malinda @plants @ui
 Feature: Add Plant (Admin form)
 
-  # TODO Malinda: implement scenarios for the Add Plant flow here.
-  # Suggested IDs: UI_PLANT_ADMIN_001 (happy path), UI_PLANT_ADMIN_002 (form validation),
-  #                UI_PLANT_ADMIN_003 (name length 3-25), UI_PLANT_USER_001 (403 on /ui/plants/add).
+  @admin @negative
+  Scenario: UI_PLANT_ADMIN_006 - Verify price validation (must be > 0)
+    Given I am logged in as "admin"
+    When I open the Add Plant page
+    And I fill in the plant name "Tulip"
+    And I select the plant category "Indoor"
+    And I enter the plant price "0"
+    And I enter the plant quantity "10"
+    And I click Save on the plant form
+    Then I should see the "Price must be greater than 0" error message below the price field in red
+    And the plant should not be created

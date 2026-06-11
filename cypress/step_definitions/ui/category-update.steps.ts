@@ -16,4 +16,8 @@ Then('I should see {string} on the category page', (text: string) => {
   cy.contains(text).should('be.visible');
 });
 
-// TODO Malinda: add parent-category change scenarios.
+Then('I should see the {string} success message', (message: string) => {
+  form.successAlert()
+    .should('be.visible')
+    .and('contain.text', message);
+});
