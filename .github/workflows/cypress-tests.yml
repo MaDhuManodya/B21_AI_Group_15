@@ -1,0 +1,181 @@
+name: Cypress E2E Tests
+
+# Triggers
+#   push to dev          → runs on every merge into dev (and direct pushes)
+#   pull_request → dev   → runs on every PR opened/updated targeting dev
+#   workflow_dispatch    → lets anyone trigger a manual run from the Actions tab
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+# Cancel any in-progress run for the same ref when a newer commit arrives.
+concurrency:
+  group: cypress-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  cypress:
+    name: UI + API tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: qa_training
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -uroot -proot --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if mysqladmin ping -h 127.0.0.1 -uroot -proot --silent 2>/dev/null; then
+              echo "::notice::MySQL is ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "::error::MySQL did not become ready in 60s"
+          exit 1
+
+      - name: Resolve QA Training App JAR
+        env:
+          # Optional repository variable. Set it under
+          #   Settings → Secrets and variables → Actions → Variables
+          # if your jar is not committed inside app/qa-training-app.jar.
+          APP_JAR_URL: ${{ vars.APP_JAR_URL }}
+        run: |
+          set -e
+          if [ -f "app/qa-training-app.jar" ]; then
+            cp app/qa-training-app.jar ./qa-training-app.jar
+            echo "::notice::Using committed jar at app/qa-training-app.jar"
+          elif [ -n "${APP_JAR_URL:-}" ]; then
+            echo "Downloading from $APP_JAR_URL ..."
+            curl -fL -o qa-training-app.jar "$APP_JAR_URL"
+            echo "::notice::Downloaded jar via APP_JAR_URL"
+          else
+            echo "::error::No QA Training App jar found."
+            echo "Either:"
+            echo "  1. Commit the jar to app/qa-training-app.jar, OR"
+            echo "  2. Set the repository variable APP_JAR_URL to a downloadable URL."
+            exit 1
+          fi
+          ls -la qa-training-app.jar
+
+      - name: Start QA Training App (Spring Boot)
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/qa_training
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
+          SERVER_PORT: '8080'
+        run: |
+          nohup java -jar qa-training-app.jar > app.log 2>&1 &
+          echo $! > app.pid
+          echo "Started app (PID $(cat app.pid)). Waiting for http://localhost:8080/api/health ..."
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:8080/api/health > /dev/null 2>&1; then
+              echo "::notice::App ready after ${i}x2s"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "::error::App did not respond on /api/health within 120 seconds"
+          echo "--- Last 200 lines of app.log ---"
+          tail -200 app.log
+          exit 1
+
+      - name: Install npm dependencies and cache Cypress binary
+        uses: cypress-io/github-action@v6
+        with:
+          runTests: false
+
+      - name: TypeScript type check
+        run: npm run typecheck
+
+      - name: Run Cypress (UI + API)
+        uses: cypress-io/github-action@v6
+        with:
+          install: false        # already installed in previous step
+          browser: chrome
+          command: npm run cy:run
+        env:
+          CYPRESS_baseUrl: http://localhost:8080
+
+      - name: Generate Allure HTML report
+        if: always()
+        run: npm run allure:generate
+        continue-on-error: true
+
+      - name: Upload Allure HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: reports/allure-report/
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload Allure raw results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: reports/allure-results/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload Cypress screenshots (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload Spring Boot app log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spring-app-log
+          path: app.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Stop QA Training App
+        if: always()
+        run: |
+          if [ -f app.pid ]; then
+            kill "$(cat app.pid)" 2>/dev/null || true
+            echo "Stopped app"
+          fi
