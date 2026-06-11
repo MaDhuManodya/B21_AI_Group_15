@@ -24,6 +24,9 @@ export const categoriesApi = {
   list: (auth: Record<string, string>, qs?: { page?: number; size?: number; search?: string; parentId?: number }) =>
     apiClient.get<CategoryDto[] | { content: CategoryDto[] }>('/api/categories', qs, auth),
 
+  listPaged: (auth: Record<string, string>, qs?: { name?: string; page?: number; size?: number; parentId?: number; sortField?: string; sortDir?: string }) =>
+    apiClient.get<{ content: CategoryDto[] }>('/api/categories/page', qs, auth),
+
   getSummary: (auth: Record<string, string>) =>
     apiClient.get<{ mainCategories: number; subCategories: number }>('/api/categories/summary', undefined, auth),
 

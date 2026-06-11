@@ -55,3 +55,56 @@ Then('the category API response should have {int} main categories and {int} sub 
   expect((lastResponse?.body as any).mainCategories).to.eq(expectedMain);
   expect((lastResponse?.body as any).subCategories).to.eq(expectedSub);
 });
+
+When('I GET the categories page with name {string}', (name: string) => {
+  categoriesApi.listPaged(authHeader, { name }).then((r) => { lastResponse = r; });
+});
+
+Then('the response should contain a category with name {string}', (name: string) => {
+  const content = (lastResponse?.body as any).content;
+  expect(content).to.be.an('array');
+  const found = content.find((c: any) => c.name === name);
+  expect(found).to.not.be.undefined;
+});
+
+When('I GET the categories page with page {int} and size {int}', (page: number, size: number) => {
+  categoriesApi.listPaged(authHeader, { page, size }).then((r) => { lastResponse = r; });
+});
+
+Then('the response should contain exactly {int} subcategories', (count: number) => {
+  const content = (lastResponse?.body as any).content;
+  expect(content).to.be.an('array');
+  expect(content.length).to.eq(count);
+});
+
+When('I GET the categories page with parent id {int}', (parentId: number) => {
+  categoriesApi.listPaged(authHeader, { parentId }).then((r) => { lastResponse = r; });
+});
+
+Then('the response should contain subcategories of parent {int}', (parentId: number) => {
+  const content = (lastResponse?.body as any).content;
+  expect(content).to.be.an('array');
+  expect(content.length).to.be.greaterThan(0);
+});
+
+When('I GET the categories page sorted by {string} in {string} order', (sortField: string, sortDir: string) => {
+  categoriesApi.listPaged(authHeader, { sortField, sortDir }).then((r) => { lastResponse = r; });
+});
+
+Then('the response categories should be sorted by {string} in {string} order', (sortField: string, order: string) => {
+  const content = (lastResponse?.body as any).content;
+  expect(content).to.be.an('array');
+  if (content.length > 1) {
+    for (let i = 0; i < content.length - 1; i++) {
+      const current = content[i][sortField];
+      const next = content[i + 1][sortField];
+      if (order === 'asc') {
+        if (typeof current === 'string') {
+          expect(current.localeCompare(next)).to.be.at.most(0);
+        } else {
+          expect(current).to.be.at.most(next);
+        }
+      }
+    }
+  }
+});

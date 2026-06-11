@@ -22,3 +22,11 @@ Feature: Plants API - Update
     When I PUT plant 1 with name "HackedName", price 1 and quantity 999
     Then the plants API response status should be 403
     And the plant 1 name should NOT be "HackedName"
+
+  @admin
+  Scenario: API_PLANT_ADMIN_007 - Admin update plant with valid data
+    Given I have "admin" plants API credentials
+    And a plant with id 1 exists
+    When I PUT plant 1 with name "Valid Update Name", price 150 and quantity 30
+    Then the plants API response status should be 200
+    And the plants API response body name should be "Valid Update Name"

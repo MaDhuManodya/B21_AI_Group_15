@@ -12,8 +12,8 @@ Feature: Auth API
     Then the auth API response status should be 200
     And the response should contain a valid JWT token
 
-  @admin @smoke
-  Scenario: API_CATEGORIES_ADMIN_007 - Verify successful login with valid credentials
+  @user @smoke
+  Scenario: API_AUTH_USER_001 - Verify successful login with valid user credentials
     When I POST login with username "testuser" and password "test123"
     Then the auth API response status should be 200
     And the response should contain a valid JWT token
