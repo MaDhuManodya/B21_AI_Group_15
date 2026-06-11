@@ -15,3 +15,9 @@ Feature: Plants API — Create
   # TODO Malinda: write create scenarios here.
   # Suggested IDs: API_PLANT_ADMIN_001 (POST 200/201), API_PLANT_ADMIN_004 (negative price 400),
   #                API_PLANT_USER_005 (POST 403).
+
+  @admin @negative
+  Scenario: API_PLANT_ADMIN_006 - Verify price validation (must be > 0)
+    Given I have "admin" API credentials for plants
+    When I POST a new plant "Tulip" with price -10.0 and quantity 5 under category 8
+    Then the plant API response status should be 400
