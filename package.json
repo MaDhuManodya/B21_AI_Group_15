@@ -10,6 +10,7 @@
     "cy:run:api": "cypress run --spec \"cypress/e2e/api/**/*.feature\"",
     "cy:run:smoke": "cypress run --env tags=@smoke",
     "cy:run:tharindu": "cypress run --env tags=@tharindu",
+    "cy:run:manodya": "cypress run --env tags=@manodya",
     "allure:generate": "allure generate reports/allure-results --clean -o reports/allure-report",
     "allure:open": "allure open reports/allure-report",
     "report": "npm run allure:generate && npm run allure:open",

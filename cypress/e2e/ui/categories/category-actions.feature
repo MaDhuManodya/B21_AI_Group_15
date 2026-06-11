@@ -1,16 +1,22 @@
 # ============================================================
 # OWNER: Manodya
 # MODULE: Category list — row actions (edit icon + delete icon)
-# SRS REFERENCE: §5.1 — Admin-Specific Features (Edit / Delete)
-# COVERAGE NOTES:
-#   - Edit icon -> /ui/categories/edit/{id}
-#   - Delete icon -> confirmation prompt -> row removed
-#   - User: Edit and Delete icons hidden / disabled
 # TAGS: @manodya @categories @ui  + @admin|@user + @smoke/@rbac
-# REUSE: CategoryListPage.ts (clickEdit, clickDelete, confirmDelete — TODO Manodya).
 # ============================================================
 @manodya @categories @ui
 Feature: Category Row Actions
 
-  # TODO Manodya: implement edit/delete action scenarios.
-  # Suggested IDs: UI_CATEGORY_ADMIN_008 (delete with prompt), UI_CATEGORY_USER_005 (no edit/delete icons).
+  @admin @smoke
+  Scenario: UI_CATEGORY_ADMIN_005 - Verify Admin can edit and delete category
+    Given I am logged in as "admin"
+    And I navigate to the categories page
+    When I click the delete icon on category row 0
+    And I confirm the delete prompt
+    Then the category "0" should be removed from the list
+
+  @user @rbac
+  Scenario: UI_CATEGORY_USER_005 - Verify User cannot edit or delete category
+    Given I am logged in as "user"
+    And I navigate to the categories page
+    Then no edit icon should be visible on the categories table
+    And no delete icon should be visible on the categories table
