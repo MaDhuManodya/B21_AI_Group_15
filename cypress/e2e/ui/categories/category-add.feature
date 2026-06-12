@@ -10,7 +10,7 @@ Feature: Add Category
   Scenario: UI_CATEGORY_ADMIN_004 - Verify Admin can add new category
     Given I am logged in as "admin"
     And I navigate to "/ui/categories"
-    When I click the "Add Category" button
+    When I click the "Add A Category" button
     And I enter category name "NewCatTest"
     And I click Save on the category form
     Then I should see the category form success alert
@@ -19,4 +19,4 @@ Feature: Add Category
   Scenario: UI_CATEGORY_USER_005 - Verify User cannot add edit or delete category
     Given I am logged in as "user"
     And I navigate to "/ui/categories"
-    Then the "Add Category" button should NOT be visible on the categories page
+    Then the "Add A Category" button should NOT be visible on the categories page

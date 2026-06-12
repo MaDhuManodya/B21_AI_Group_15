@@ -19,7 +19,7 @@ export class CategoryFormPage extends BasePage {
   saveButton()         { return cy.contains('button', /^Save$/); }
   cancelButton()       { return cy.contains('button, a', /^Cancel$/); }
   nameError()          { return cy.contains(/Category name (is required|must be)/i); }
-  successAlert()       { return cy.contains(/Category (added|updated) successfully/i); }
+  successAlert()       { return cy.contains(/Category (added|updated|created) successfully/i); }
 
   visitAdd()           { return cy.visit('/ui/categories/add'); }
   visitEdit(id: number){ return cy.visit(`/ui/categories/edit/${id}`); }

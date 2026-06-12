@@ -16,7 +16,7 @@ export class CategoryListPage extends BasePage {
   parentFilter()   { return cy.get('select[name*="parent" i]'); }
   searchButton()   { return cy.contains('button', /^Search$/); }
   resetButton()    { return cy.contains('button', /^Reset$/); }
-  addCategoryBtn() { return cy.contains('a,button', /Add Category/i); }
+  addCategoryBtn() { return cy.contains('a,button', /Add (A )?Category/i); }
   table()          { return cy.get('table'); }
   rows()           { return this.table().find('tbody tr'); }
   emptyMessage()   { return cy.contains(/No category found/i); }
@@ -37,14 +37,14 @@ export class CategoryListPage extends BasePage {
   }
 
   clickEditOnRow(index: number) {
-    this.rows().eq(index).find('[aria-label*="Edit" i], [title*="Edit" i], button:contains("Edit")').click();
+    this.rows().eq(index).find('[aria-label*="Edit"], [aria-label*="edit"], [title*="Edit"], [title*="edit"], button:contains("Edit"), button:contains("edit")').click();
   }
 
   clickDeleteOnRow(index: number) {
-    this.rows().eq(index).find('[aria-label*="Delete" i], [title*="Delete" i], button:contains("Delete")').click();
+    this.rows().eq(index).find('[aria-label*="Delete"], [aria-label*="delete"], [title*="Delete"], [title*="delete"], button:contains("Delete"), button:contains("delete")').click();
   }
 
   confirmDelete() {
-    cy.contains('button', /Confirm|Delete|Yes/i).filter(':visible').click();
+    // Cypress auto-accepts native confirm dialogs automatically.
   }
 }

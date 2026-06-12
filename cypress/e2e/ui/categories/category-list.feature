@@ -11,7 +11,7 @@ Feature: Category List
     Given I am logged in as "admin"
     When I navigate to "/ui/categories"
     Then the categories table should be visible
-    And the "Add Category" button should be visible on the categories page
+    And the "Add A Category" button should be visible on the categories page
 
   @admin
   Scenario: UI_CATEGORY_ADMIN_002 - Verify Admin can search category by name
@@ -24,7 +24,7 @@ Feature: Category List
   Scenario: UI_CATEGORY_ADMIN_003 - Verify Admin can filter categories by parent
     Given I am logged in as "admin"
     And I navigate to "/ui/categories"
-    When I filter categories by parent "Electronics"
+    When I filter categories by parent "Indoor"
     Then the categories table should be visible
 
   @user @smoke @rbac
@@ -32,7 +32,7 @@ Feature: Category List
     Given I am logged in as "user"
     When I navigate to "/ui/categories"
     Then the categories table should be visible
-    And the "Add Category" button should NOT be visible on the categories page
+    And the "Add A Category" button should NOT be visible on the categories page
 
   @user
   Scenario: UI_CATEGORY_USER_002 - Verify User can view category table
