@@ -3,8 +3,10 @@
 // Step definitions for: cypress/e2e/ui/categories/category-actions.feature
 // Page object: cypress/support/pages/CategoryListPage.ts
 // ============================================================
-import { When, Then } from '@badeball/cypress-cucumber-preprocessor';
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { CategoryListPage } from '../../support/pages/CategoryListPage';
+import { categoriesApi } from '../../support/api/categoriesApi';
+import { jwtAuthHeader } from '../../support/api/authApi';
 
 const page = new CategoryListPage();
 
@@ -27,7 +29,7 @@ When('I click the delete icon on category row {int}', (index: number) => {
   page.clickDeleteOnRow(index);
 });
 
-When('I confirm the delete prompt', () => {
+When('I confirm the category delete prompt', () => {
   page.confirmDelete();
 });
 
@@ -56,5 +58,21 @@ Then('no delete icon should be visible on the categories table', () => {
     } else {
       page.rows().find('button:has(svg.lucide-trash-2), button:has(.text-red-600)').should('not.exist');
     }
+  });
+});
+
+Given('a deletable category exists', () => {
+  jwtAuthHeader('admin').then((auth) => {
+    categoriesApi.list(auth).then((res) => {
+      const list = Array.isArray(res.body) ? res.body : (res.body as any)?.content || [];
+      const existing = list.find((c: any) => c.name === 'DelUI');
+      if (existing) {
+        categoriesApi.delete(auth, existing.id).then(() => {
+          categoriesApi.create(auth, { name: 'DelUI' });
+        });
+      } else {
+        categoriesApi.create(auth, { name: 'DelUI' });
+      }
+    });
   });
 });
