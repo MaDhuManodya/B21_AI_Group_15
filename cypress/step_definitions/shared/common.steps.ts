@@ -6,6 +6,7 @@
 //   Given the app is running at {string}
 //   When  I navigate to {string}
 //   When  I click the {string} button
+//   When  I confirm the delete prompt
 //   Then  I should be redirected to {string}
 //   Then  the URL should (remain|be) {string}
 //   Then  I should see {string}
@@ -24,6 +25,10 @@ When('I navigate to {string}', (path: string) => {
 
 When('I click the {string} button', (label: string) => {
   cy.contains('button, a, input[type="submit"]', label).click();
+});
+
+When('I confirm the delete prompt', () => {
+  cy.on('window:confirm', () => true);
 });
 
 Then('I should be redirected to {string}', (path: string) => {

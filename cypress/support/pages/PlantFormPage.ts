@@ -21,6 +21,7 @@ export class PlantFormPage extends BasePage {
   cancelButton()   { return cy.contains('a, button', /^Cancel$/); }
   successAlert()   { return cy.contains(/Plant (updated|added) successfully/i); }
   nameError()      { return cy.contains(/Plant name (is required|must be)/i); }
+  nameLengthError() { return cy.contains(/Plant name must be between 3 and 25 characters/i); }
   priceError()     { return cy.contains(/Price (is required|must be)/i); }
   quantityError()  { return cy.contains(/Quantity (is required|cannot be negative)/i); }
   categoryError()  { return cy.contains(/Category is required/i); }
@@ -48,12 +49,17 @@ export class PlantFormPage extends BasePage {
   clickSave()   { this.saveButton().click(); }
   clickCancel() { this.cancelButton().click(); }
 
+  // ---- convenience: fill fields without saving ----
+  fill(input: { name?: string; categoryLabel?: string; price?: string | number; quantity?: string | number }) {
+    if (input.name !== undefined) this.setName(input.name);
+    if (input.categoryLabel !== undefined) this.selectCategory(input.categoryLabel);
+    if (input.price !== undefined) this.setPrice(input.price);
+    if (input.quantity !== undefined) this.setQuantity(input.quantity);
+  }
+
   // ---- convenience: fill all fields then Save ----
   fillAndSave(input: { name: string; categoryLabel?: string; price: string | number; quantity: string | number }) {
-    this.setName(input.name);
-    if (input.categoryLabel) this.selectCategory(input.categoryLabel);
-    this.setPrice(input.price);
-    this.setQuantity(input.quantity);
+    this.fill(input);
     this.clickSave();
   }
 }

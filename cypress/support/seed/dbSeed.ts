@@ -44,7 +44,7 @@ interface SeedConfig {
   category: { name: string };
   subCategory: { name: string };
   plant: { name: string; price: number; quantity: number };
-  sale: { quantity: number };
+  sale: { quantity: number; count?: number };
 }
 
 interface CategoryRecord {
@@ -187,11 +187,16 @@ async function ensurePlant(baseUrl: string, token: string, cfg: SeedConfig, subI
 }
 
 async function ensureSale(baseUrl: string, token: string, cfg: SeedConfig, plantId: number): Promise<void> {
+  // Guarantee at least `count` sale records on the seed plant so the
+  // list / sort / delete scenarios always have multiple rows to work with.
+  const wanted = Math.max(1, cfg.sale.count ?? 1);
   const list = await api(baseUrl, 'GET', '/api/sales', token);
-  if (asArray<SaleRecord>(list.body).some((s) => s.plant?.id === plantId)) return;
+  const existing = asArray<SaleRecord>(list.body).filter((s) => s.plant?.id === plantId).length;
 
   // POST /api/sales/plant/{plantId}?quantity=N — no body.
-  await api(baseUrl, 'POST', `/api/sales/plant/${plantId}?quantity=${cfg.sale.quantity}`, token);
+  for (let i = existing; i < wanted; i++) {
+    await api(baseUrl, 'POST', `/api/sales/plant/${plantId}?quantity=${cfg.sale.quantity}`, token);
+  }
 }
 
 // ---------- public API ----------

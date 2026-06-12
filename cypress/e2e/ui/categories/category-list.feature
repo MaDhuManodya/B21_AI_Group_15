@@ -1,22 +1,57 @@
 # ============================================================
 # OWNER: Manodya
 # MODULE: Category list page (/ui/categories)
-# SRS REFERENCE: §5.1 — Category List Page
-# COVERAGE NOTES:
-#   - Paginated list of categories (ID, Name, Parent)
-#   - Search by category name
-#   - Filter by parent category (All Parents dropdown)
-#   - Sort by ID / Name / Parent
-#   - Empty state: "No category found"
-#   - Admin: "Add Category" button visible
-#   - User: "Add Category" hidden / disabled
 # TAGS: @manodya @categories @ui  + @admin|@user + @smoke/@negative/@rbac
-# REUSE: CategoryListPage.ts (TODO Manodya — fill selectors + methods).
 # ============================================================
-@manodya @categories @ui
+@manodya @categories @ui @215550L
 Feature: Category List
 
-  # TODO Manodya: implement category list scenarios.
-  # Suggested IDs: UI_CATEGORY_ADMIN_003 (view paginated list), UI_CATEGORY_ADMIN_004 (search by name),
-  #                UI_CATEGORY_ADMIN_005 (filter by parent), UI_CATEGORY_USER_002 (no Add button),
-  #                UI_CATEGORY_USER_003 (sort works).
+  @manodya @categories @ui @215550L @admin @smoke
+  Scenario: UI_CATEGORY_ADMIN_001 - Verify category page visible to Admin
+    Given I am logged in as "admin"
+    When I navigate to "/ui/categories"
+    Then the categories table should be visible
+    And the "Add A Category" button should be visible on the categories page
+
+  @manodya @categories @ui @215550L @admin
+  Scenario: UI_CATEGORY_ADMIN_002 - Verify Admin can search category by name
+    Given I am logged in as "admin"
+    And I navigate to "/ui/categories"
+    When I search for category "Test"
+    Then the categories table should be visible
+    
+  @manodya @categories @ui @215550L @admin
+  Scenario: UI_CATEGORY_ADMIN_003 - Verify Admin can filter categories by parent
+    Given I am logged in as "admin"
+    And I navigate to "/ui/categories"
+    When I filter categories by parent "Indoor"
+    Then the categories table should be visible
+
+  @manodya @categories @ui @215550L @user @smoke @rbac
+  Scenario: UI_CATEGORY_USER_001 - Verify category page visible to User
+    Given I am logged in as "user"
+    When I navigate to "/ui/categories"
+    Then the categories table should be visible
+    And the "Add A Category" button should NOT be visible on the categories page
+
+  @manodya @categories @ui @215550L @user
+  Scenario: UI_CATEGORY_USER_002 - Verify User can view category table
+    Given I am logged in as "user"
+    When I navigate to "/ui/categories"
+    Then the categories table should be visible
+    
+  @manodya @categories @ui @215550L @user
+  Scenario: UI_CATEGORY_USER_003 - Verify User can search category by name
+    Given I am logged in as "user"
+    And I navigate to "/ui/categories"
+    When I search for category "Test"
+    Then the categories table should be visible
+
+  @manodya @categories @ui @215550L @user
+  Scenario: UI_CATEGORY_USER_004 - Verify User can reset category search
+    Given I am logged in as "user"
+    And I navigate to "/ui/categories"
+    When I search for category "NonExistentCategory"
+    And the empty message should be visible
+    When I click the "Reset" button
+    Then the categories table should be visible

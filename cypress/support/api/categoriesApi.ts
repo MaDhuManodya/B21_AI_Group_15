@@ -16,7 +16,7 @@ export interface CategoryDto {
 }
 export interface CreateCategoryRequest {
   name: string;
-  parentId?: number | null;
+  parent?: { id: number } | null;
 }
 
 export const categoriesApi = {
