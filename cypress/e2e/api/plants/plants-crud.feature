@@ -10,10 +10,10 @@ Feature: Plants API - CRUD and Access Control
   @admin @delete
   Scenario: API_PLANT_ADM_003 - Admin deletes a plant successfully
     Given I have "admin" plants API credentials
-    And a plant with id 10 exists
-    When I DELETE plant 10
+    And I create a plant "Z-Plant-Pabasara-ToDelete" under category 2 with price 75.0 and quantity 8
+    When I DELETE that plant
     Then the plants API response status should be 204
-    And a subsequent GET for plant 10 should return 404
+    And a subsequent GET for that plant should return 404
 
   @admin @schema
   Scenario: API_PLANT_ADM_005 - Admin retrieves plant list schema

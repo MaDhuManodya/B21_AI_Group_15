@@ -1,39 +1,34 @@
-import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
+import { When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { plantsApi } from '../../support/api/plantsApi';
-import { jwtAuthHeader } from '../../support/api/authApi';
 import { state } from '../../support/scenarioState';
 
-Given('a plant with id {int} exists', (id: number) => {
-  jwtAuthHeader('admin').then((adminAuth) => {
-    plantsApi.list(adminAuth).then((res) => {
-      const items = res.body as any[];
-      const match = items.find((p) => p.id === id) ?? items[0];
-      state.plantId = match.id;
-    });
-  });
-});
-
 When(
-  'I PUT plant {int} with price {float} and quantity {int}',
-  (id: number, price: number, quantity: number) => {
-    const targetId = state.plantId ?? id;
-    jwtAuthHeader('admin').then((adminAuth) => {
-      plantsApi.getOne(adminAuth, targetId).then((cur) => {
-        const dto = cur.body as any;
-        plantsApi.update(state.auth!, targetId, { 
-          name: dto.name, 
-          price, 
-          quantity, 
-          categoryId: dto.categoryId ?? 1 
-        }).then((res) => { 
-          state.lastResponse = res; 
-        });
-      });
+  'I PUT that plant with name {string} price {float} and quantity {int} under category {int}',
+  (name: string, price: number, quantity: number, categoryId: number) => {
+    plantsApi.update(state.auth!, state.plantId!, { name, price, quantity, categoryId }).then((res) => {
+      state.lastResponse = res;
     });
-});
+  }
+);
 
-Then('the response should reflect the updated price and quantity', () => {
-  const body = state.lastResponse?.body as { price: number; quantity: number };
-  expect(body.price).to.be.a('number');
-  expect(body.quantity).to.be.a('number');
-});
+Then(
+  'the response should reflect name {string} price {float} and quantity {int}',
+  (name: string, price: number, quantity: number) => {
+    const body = state.lastResponse?.body as { name: string; price: number; quantity: number };
+    expect(body.name).to.eq(name);
+    expect(body.price).to.eq(price);
+    expect(body.quantity).to.eq(quantity);
+  }
+);
+
+Then(
+  'a subsequent GET for that plant should show name {string} price {float} and quantity {int}',
+  (name: string, price: number, quantity: number) => {
+    plantsApi.getOne(state.auth!, state.plantId!).then((res) => {
+      const body = res.body as { name: string; price: number; quantity: number };
+      expect(body.name).to.eq(name);
+      expect(body.price).to.eq(price);
+      expect(body.quantity).to.eq(quantity);
+    });
+  }
+);

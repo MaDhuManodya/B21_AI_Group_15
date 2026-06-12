@@ -17,6 +17,15 @@ Given('I have no API credentials', () => {
   state.auth = noAuthHeader();
 });
 
+Given(
+  'I create a plant {string} under category {int} with price {float} and quantity {int}',
+  (name: string, categoryId: number, price: number, quantity: number) => {
+    plantsApi.create(state.auth ?? {}, categoryId, { name, price, quantity }).then((r) => {
+      state.plantId = (r.body as { id: number }).id;
+    });
+  }
+);
+
 // --- WHEN STEPS ---
 
 When('I GET the plants list', () => {
@@ -38,6 +47,10 @@ When(
 
 When('I DELETE plant {int}', (id: number) => {
   plantsApi.delete(state.auth ?? {}, id).then((r) => { state.lastResponse = r; });
+});
+
+When('I DELETE that plant', () => {
+  plantsApi.delete(state.auth ?? {}, state.plantId!).then((r) => { state.lastResponse = r; });
 });
 
 // --- THEN STEPS ---
@@ -66,6 +79,12 @@ Then('the response should contain a valid paginated plant list schema', () => {
 
 Then('a subsequent GET for plant {int} should return 404', (id: number) => {
   plantsApi.getOne(state.auth ?? {}, id).then((r) => {
+    expect(r.status).to.eq(404);
+  });
+});
+
+Then('a subsequent GET for that plant should return 404', () => {
+  plantsApi.getOne(state.auth ?? {}, state.plantId!).then((r) => {
     expect(r.status).to.eq(404);
   });
 });
