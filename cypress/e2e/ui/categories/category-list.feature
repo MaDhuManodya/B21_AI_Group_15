@@ -50,7 +50,7 @@ Feature: Category List
   @user
   Scenario: UI_CATEGORY_USER_004 - Verify User can reset category search
     Given I am logged in as "user"
-    And I navigate to the categories page
+    And I navigate to "/ui/categories"
     When I search for category "NonExistentCategory"
     And the empty message should be visible
     When I click the "Reset" button
