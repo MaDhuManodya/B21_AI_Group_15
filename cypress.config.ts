@@ -3,6 +3,7 @@ import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
 import createEsbuildPlugin from '@badeball/cypress-cucumber-preprocessor/esbuild';
 import allureWriter from '@shelex/cypress-allure-plugin/writer';
+import { seedDatabase, cleanupDatabase } from './cypress/support/seed/dbSeed';
 
 export default defineConfig({
   e2e: {
@@ -39,6 +40,29 @@ export default defineConfig({
         })
       );
       allureWriter(on, config);
+
+      // --- DB seeding (Tharindu) ---
+      // Base URL the seed module talks to (same as the API tests).
+      const apiBaseUrl = (config.env.apiBaseUrl as string) || config.baseUrl || 'http://localhost:8080';
+
+      // Tasks let step files / hooks drive the Node-side seed module.
+      on('task', {
+        async 'db:seed'() {
+          return seedDatabase(apiBaseUrl);
+        },
+        async 'db:cleanup'() {
+          await cleanupDatabase(apiBaseUrl);
+          return null;
+        },
+      });
+
+      // Remove the seeded data once the whole headless run finishes.
+      // (after:run does not fire in `cypress open`; debug data is left in
+      //  place there, and the idempotent before() hook reuses it next run.)
+      on('after:run', async () => {
+        await cleanupDatabase(apiBaseUrl);
+      });
+
       return config;
     },
   },

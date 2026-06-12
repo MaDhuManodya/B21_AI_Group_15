@@ -15,5 +15,13 @@
   "sale": {
     "valid": { "plantId": 1, "quantity": 2 },
     "zeroQuantity": { "plantId": 1, "quantity": 0 }
+  },
+
+  "seed": {
+    "_comment": "Baseline data fed into the DB before the suite runs (see cypress/support/seed/dbSeed.ts). The seed plant is identified by its sub-category, so the plant-update tests renaming it does not break cleanup. App constraints: category name 3-10 chars; plants attach to SUB-categories only; a SOLD plant cannot be deleted (inventory FK), so cleanup removes the seed sales every run and reuses the seed plant/categories.",
+    "category": { "name": "QASeedTop" },
+    "subCategory": { "name": "QASeedSub" },
+    "plant": { "name": "QA Seed Plant", "price": 100.0, "quantity": 100 },
+    "sale": { "quantity": 2 }
   }
 }
