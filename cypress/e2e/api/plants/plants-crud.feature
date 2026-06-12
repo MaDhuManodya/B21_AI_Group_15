@@ -1,19 +1,49 @@
 # ============================================================
-# OWNER: Bhawanthi
-# MODULE: Plants API — list, get-one, delete
-# ENDPOINTS: GET /api/plants, GET /api/plants/{id}, DELETE /api/plants/{id}
-# COVERAGE NOTES:
-#   - Admin: list / get-one / delete allowed
-#   - User: GET allowed (read-only), DELETE -> 403
-#   - No auth -> 401 Unauthorized
-# TAGS: @bhawanthi @plants @api  + @admin|@user + @smoke/@negative/@rbac
-# REUSE: cypress/support/api/plantsApi.ts (list/get/delete — TODO Bhawanthi).
-#        Tharindu has already implemented `update()` in the same file.
+# OWNER: bhawanthi pabasara
+# RESOURCE: GET/DELETE /api/plants
+# SRS REFERENCE: §5.5, §6.1 — Plant CRUD and Access Control
+# TEST IDS: API_PLANT_ADM_003, API_PLANT_ADM_005, API_PLANT_USR_001, API_PLANT_USR_003, API_PLANT_USR_004, API_PLANT_USR_005
 # ============================================================
-@bhawanthi @plants @api
-Feature: Plants API — List / Get / Delete
+@bhawanthi_pabasara @plants @api
+Feature: Plants API - CRUD and Access Control
 
-  # TODO Bhawanthi: write scenarios here.
-  # Suggested IDs: API_PLANT_ADMIN_002 (GET list), API_PLANT_ADMIN_003 (DELETE 200),
-  #                API_PLANT_USER_001 (GET allowed), API_PLANT_USER_002 (DELETE 403),
-  #                API_PLANT_USER_003 (GET specific ID).
+  @admin @delete
+  Scenario: API_PLANT_ADM_003 - Admin deletes a plant successfully
+    Given I have "admin" plants API credentials
+    And a plant with id 10 exists
+    When I DELETE plant 10
+    Then the plants API response status should be 200
+    And a subsequent GET for plant 10 should return 404
+
+  @admin @schema
+  Scenario: API_PLANT_ADM_005 - Admin retrieves plant list schema
+    Given I have "admin" plants API credentials
+    When I GET the plants list
+    Then the plants API response status should be 200
+    And the response should contain a valid paginated plant list schema
+
+  @user @smoke
+  Scenario: API_PLANT_USR_001 - User can view the plants list
+    Given I have "user" plants API credentials
+    When I GET the plants list
+    Then the plants API response status should be 200
+    And the response should contain a list of plants
+
+  @user @rbac
+  Scenario: API_PLANT_USR_003 - User cannot delete a plant
+    Given I have "user" plants API credentials
+    When I DELETE plant 1
+    Then the plants API response status should be 403
+
+  @user @smoke
+  Scenario: API_PLANT_USR_004 - User can view details of a specific plant
+    Given I have "user" plants API credentials
+    When I GET plant 1
+    Then the plants API response status should be 200
+    And the plants API response body name should be "Rose"
+
+  @noauth @security
+  Scenario: API_PLANT_USR_005 - Access denied for unauthenticated users
+    Given I have no API credentials
+    When I GET the plants list
+    Then the plants API response status should be 401
