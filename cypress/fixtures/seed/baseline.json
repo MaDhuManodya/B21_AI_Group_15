@@ -1,0 +1,13 @@
+{
+  "categories": [
+    { "key": "garden", "name": "TestGarden" },
+    { "key": "roses",  "name": "TestRoses",  "parent": "garden" }
+  ],
+  "plants": [
+    { "key": "currentRose", "name": "TestCurrent", "category": "roses", "price": 12.0, "quantity": 100 }
+  ],
+  "sales": [
+    { "plant": "currentRose", "quantity": 2 },
+    { "plant": "currentRose", "quantity": 3 }
+  ]
+}

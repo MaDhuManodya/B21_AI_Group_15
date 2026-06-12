@@ -17,12 +17,12 @@ Given('a sale record exists', () => {
   jwtAuthHeader('admin').then((adminAuth) => {
     salesApi.list(adminAuth).then((res) => {
       expect(res.status).to.eq(200);
-      const items = res.body;
-      if (items && items.length > 0) {
+      const items = Array.isArray(res.body) ? res.body : [];
+      if (items.length > 0) {
         state.saleId = items[0].id;
         return;
       }
-      throw new Error('No sale records exist — seed one before running this scenario');
+      throw new Error('No sale records exist — testDataManager seed did not run');
     });
   });
 });

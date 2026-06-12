@@ -1,0 +1,12 @@
+{
+  "categories": [
+    { "key": "outdoor", "name": "Outdoor", "parent": "garden" },
+    { "key": "succulents", "name": "Succulents", "parent": "garden" }
+  ],
+  "plants": [
+    { "key": "cactus",  "name": "Cactus", "category": "succulents", "price": 80,  "quantity": 15 },
+    { "key": "palm",    "name": "Palm",   "category": "outdoor",    "price": 250, "quantity": 5  },
+    { "key": "lily",    "name": "Lily",   "category": "indoorPlants", "price": 120, "quantity": 30 }
+  ],
+  "sales": []
+}
