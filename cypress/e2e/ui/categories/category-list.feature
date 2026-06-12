@@ -6,48 +6,48 @@
 @manodya @categories @ui @215550L
 Feature: Category List
 
-  @admin @smoke
+  @manodya @categories @ui @215550L @admin @smoke
   Scenario: UI_CATEGORY_ADMIN_001 - Verify category page visible to Admin
     Given I am logged in as "admin"
     When I navigate to "/ui/categories"
     Then the categories table should be visible
     And the "Add A Category" button should be visible on the categories page
 
-  @admin
+  @manodya @categories @ui @215550L @admin
   Scenario: UI_CATEGORY_ADMIN_002 - Verify Admin can search category by name
     Given I am logged in as "admin"
     And I navigate to "/ui/categories"
     When I search for category "Test"
     Then the categories table should be visible
     
-  @admin
+  @manodya @categories @ui @215550L @admin
   Scenario: UI_CATEGORY_ADMIN_003 - Verify Admin can filter categories by parent
     Given I am logged in as "admin"
     And I navigate to "/ui/categories"
     When I filter categories by parent "Indoor"
     Then the categories table should be visible
 
-  @user @smoke @rbac
+  @manodya @categories @ui @215550L @user @smoke @rbac
   Scenario: UI_CATEGORY_USER_001 - Verify category page visible to User
     Given I am logged in as "user"
     When I navigate to "/ui/categories"
     Then the categories table should be visible
     And the "Add A Category" button should NOT be visible on the categories page
 
-  @user
+  @manodya @categories @ui @215550L @user
   Scenario: UI_CATEGORY_USER_002 - Verify User can view category table
     Given I am logged in as "user"
     When I navigate to "/ui/categories"
     Then the categories table should be visible
     
-  @user
+  @manodya @categories @ui @215550L @user
   Scenario: UI_CATEGORY_USER_003 - Verify User can search category by name
     Given I am logged in as "user"
     And I navigate to "/ui/categories"
     When I search for category "Test"
     Then the categories table should be visible
 
-  @user
+  @manodya @categories @ui @215550L @user
   Scenario: UI_CATEGORY_USER_004 - Verify User can reset category search
     Given I am logged in as "user"
     And I navigate to "/ui/categories"

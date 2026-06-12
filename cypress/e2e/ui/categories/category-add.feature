@@ -6,7 +6,7 @@
 @manodya @categories @ui @215550L
 Feature: Add Category
 
-  @admin @smoke
+  @manodya @categories @ui @215550L @admin @smoke
   Scenario: UI_CATEGORY_ADMIN_004 - Verify Admin can add new category
     Given I am logged in as "admin"
     And I navigate to "/ui/categories"
@@ -15,7 +15,7 @@ Feature: Add Category
     And I click Save on the category form
     Then I should see the category form success alert
 
-  @user @rbac
+  @manodya @categories @ui @215550L @user @rbac
   Scenario: UI_CATEGORY_USER_005 - Verify User cannot add edit or delete category
     Given I am logged in as "user"
     And I navigate to "/ui/categories"
