@@ -56,12 +56,4 @@ Then('the plant API response status should be {int}', (status: number) => {
   expect(lastResponse?.status).to.eq(status);
 });
 
-When('I POST a new plant with negative price under the seed sub category', () => {
-  cy.task<{ subId: number }>('db:seed').then(({ subId }) => {
-    plantsApi.create(authHeader, subId, { name: 'Tulip', price: -10.0, quantity: 5 }).then((r) => {
-      lastResponse = r;
-    });
-  });
-});
-
 // TODO Bhawanthi / Malinda: add domain Then steps (body field assertions, list size, etc.)

@@ -3,22 +3,7 @@ import { apiClient } from '../../support/api/apiClient';
 
 let lastResponse: any;
 
-function postLoginWithFixtureRole(role: 'admin' | 'user') {
-  cy.fixture('users.json').then((users) => {
-    const { username, password } = users[role];
-    const base = Cypress.env('apiBaseUrl') || Cypress.config('baseUrl');
-    cy.request({
-      method: 'POST',
-      url: `${base}/api/auth/login`,
-      body: { username, password },
-      failOnStatusCode: false,
-    }).then((res) => {
-      lastResponse = res;
-    });
-  });
-}
-
-When('I POST login with username {string} and password {string}', (username: string, password: string) => {
+When('I POST login with username {string} and password {string}', (username, password) => {
   const base = Cypress.env('apiBaseUrl') || Cypress.config('baseUrl');
   cy.request({
     method: 'POST',
@@ -28,14 +13,6 @@ When('I POST login with username {string} and password {string}', (username: str
   }).then((res) => {
     lastResponse = res;
   });
-});
-
-When('I POST login with the admin credentials', () => {
-  postLoginWithFixtureRole('admin');
-});
-
-When('I POST login with the user credentials', () => {
-  postLoginWithFixtureRole('user');
 });
 
 Then('the auth API response status should be {int}', (status: number) => {
@@ -48,4 +25,3 @@ Then('the response should contain a valid JWT token', () => {
   expect(lastResponse?.body).to.have.property('tokenType');
   expect(lastResponse?.body.tokenType).to.eq('Bearer');
 });
-

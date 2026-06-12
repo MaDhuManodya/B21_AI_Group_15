@@ -50,52 +50,38 @@ When('I GET the categories summary', () => {
   categoriesApi.getSummary(authHeader).then((r) => { lastResponse = r; });
 });
 
-Then('the category summary response status should be {int}', (status: number) => {
-  expect(lastResponse?.status).to.eq(status);
+Then('the category API response should have {int} main categories and {int} sub categories', (expectedMain: number, expectedSub: number) => {
+  expect(lastResponse?.status).to.eq(200);
+  expect((lastResponse?.body as any).mainCategories).to.eq(expectedMain);
+  expect((lastResponse?.body as any).subCategories).to.eq(expectedSub);
 });
 
-Then('the response should return a valid summary with counts greater than zero', () => {
-  const body = lastResponse?.body as any;
-  expect(body).to.have.property('mainCategories');
-  expect(body).to.have.property('subCategories');
-  expect(body.mainCategories).to.be.a('number').and.be.greaterThan(0);
-  // subCategories can be 0 if only main cats exist, just check it's a number
-  expect(body.subCategories).to.be.a('number');
+When('I GET the categories page with name {string}', (name: string) => {
+  categoriesApi.listPaged(authHeader, { name }).then((r) => { lastResponse = r; });
 });
 
-When('I GET the categories page with the seed category name', () => {
-  cy.task<{ mainId: number }>('db:seed').then(({ mainId }) => {
-    // After seeding, fetch all categories and look for the seed main cat name
-    cy.fixture('test-data.json').then((data: any) => {
-      const seedName = data.seed.category.name;
-      categoriesApi.listPaged(authHeader, { name: seedName }).then((r) => { lastResponse = r; });
-    });
-  });
-});
-
-Then('the response should contain the seed category name', () => {
-  cy.fixture('test-data.json').then((data: any) => {
-    const seedName = data.seed.category.name;
-    const content = (lastResponse?.body as any).content;
-    expect(content).to.be.an('array');
-    const found = content.find((c: any) => c.name === seedName);
-    expect(found).to.not.be.undefined;
-  });
-});
-
-Then('the response should contain at most {int} items', (maxCount: number) => {
+Then('the response should contain a category with name {string}', (name: string) => {
   const content = (lastResponse?.body as any).content;
   expect(content).to.be.an('array');
-  expect(content.length).to.be.at.most(maxCount);
+  const found = content.find((c: any) => c.name === name);
+  expect(found).to.not.be.undefined;
 });
 
-When('I GET the categories page with the seed main category as parent', () => {
-  cy.task<{ mainId: number }>('db:seed').then(({ mainId }) => {
-    categoriesApi.listPaged(authHeader, { parentId: mainId }).then((r) => { lastResponse = r; });
-  });
+When('I GET the categories page with page {int} and size {int}', (page: number, size: number) => {
+  categoriesApi.listPaged(authHeader, { page, size }).then((r) => { lastResponse = r; });
 });
 
-Then('the response should contain at least one subcategory', () => {
+Then('the response should contain exactly {int} subcategories', (count: number) => {
+  const content = (lastResponse?.body as any).content;
+  expect(content).to.be.an('array');
+  expect(content.length).to.eq(count);
+});
+
+When('I GET the categories page with parent id {int}', (parentId: number) => {
+  categoriesApi.listPaged(authHeader, { parentId }).then((r) => { lastResponse = r; });
+});
+
+Then('the response should contain subcategories of parent {int}', (parentId: number) => {
   const content = (lastResponse?.body as any).content;
   expect(content).to.be.an('array');
   expect(content.length).to.be.greaterThan(0);
