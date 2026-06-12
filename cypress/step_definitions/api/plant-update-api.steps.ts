@@ -1,22 +1,8 @@
 // ============================================================
 // Step definitions for: cypress/e2e/api/plants/plant-update.feature
 // Covers IDs: API_PLANT_ADMIN_001, API_PLANT_USER_001
-//
-// Uses "plants API ..." (plural) phrases so they don't collide
-// with the placeholder "plant API ..." (singular) phrases owned
-// by Bhawanthi / Malinda in plants-api.steps.ts.
-//
-// Also exports the reusable Given step
-//   "a plant with id {int} exists"
-// which is consumed by the UI plant-update.feature as well.
-//
-// NOTE ON "plant 1": the test-case document targets plant id 1, but on a
-// freshly created DB the seed plant may have a different id. The Given step
-// below resolves the requested id to a REAL plant (preferring the requested
-// id, else the first available plant) and stores it in state.plantId. The
-// When/Then steps then act on state.plantId, so the suite never depends on a
-// specific hard-coded id existing.
 // ============================================================
+
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { jwtAuthHeader } from '../../support/api/authApi';
 import { plantsApi, type PlantDto } from '../../support/api/plantsApi';
@@ -67,6 +53,37 @@ When(
             state.lastResponse = { status: res.status, body: res.body };
           });
       });
+    });
+  }
+);
+
+When(
+  'I PUT that plant with name {string} price {float} and quantity {int} under category {int}',
+  (name: string, price: number, quantity: number, categoryId: number) => {
+    plantsApi.update(state.auth!, state.plantId!, { name, price, quantity, categoryId }).then((res) => {
+      state.lastResponse = res;
+    });
+  }
+);
+
+Then(
+  'the response should reflect name {string} price {float} and quantity {int}',
+  (name: string, price: number, quantity: number) => {
+    const body = state.lastResponse?.body as { name: string; price: number; quantity: number };
+    expect(body.name).to.eq(name);
+    expect(body.price).to.eq(price);
+    expect(body.quantity).to.eq(quantity);
+  }
+);
+
+Then(
+  'a subsequent GET for that plant should show name {string} price {float} and quantity {int}',
+  (name: string, price: number, quantity: number) => {
+    plantsApi.getOne(state.auth!, state.plantId!).then((res) => {
+      const body = res.body as { name: string; price: number; quantity: number };
+      expect(body.name).to.eq(name);
+      expect(body.price).to.eq(price);
+      expect(body.quantity).to.eq(quantity);
     });
   }
 );

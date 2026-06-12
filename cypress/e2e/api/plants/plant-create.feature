@@ -1,17 +1,28 @@
 # ============================================================
-# OWNER: Malinda
-# MODULE: Plants API — POST (create)
-# ENDPOINT: POST /api/plants
-# COVERAGE NOTES:
-#   - Admin can create plant (200/201)
-#   - User POST -> 403 Forbidden
-#   - Validation: negative price -> 400, name length 3-25 -> 400
-# TAGS: @malinda @plants @api  + @admin|@user + @smoke/@negative/@rbac
-# REUSE: cypress/support/api/plantsApi.ts (create method — TODO Malinda).
+# OWNER: bhawanthi pabasara
+# RESOURCE: POST /api/plants
+# SRS REFERENCE: §5 — Add Plant
+# TEST IDS: API_PLANT_ADM_001, API_PLANT_ADM_004, API_PLANT_USR_002
 # ============================================================
-@malinda @plants @api
-Feature: Plants API — Create
+@bhawanthi_pabasara @plants @api
+Feature: Plants API - Create
 
-  # TODO Malinda: write create scenarios here.
-  # Suggested IDs: API_PLANT_ADMIN_001 (POST 200/201), API_PLANT_ADMIN_004 (negative price 400),
-  #                API_PLANT_USER_005 (POST 403).
+  @admin @smoke
+  Scenario: API_PLANT_ADM_001 - Admin creates a new plant record
+    Given I have "admin" plants API credentials
+    When I POST a new plant "Z-Plant-Pabasara-999" with price 120.0 and quantity 15 under category 2
+    Then the plants API response status should be 201
+    And the plants API response body name should be "Z-Plant-Pabasara-999"
+
+  @admin @negative
+  Scenario: API_PLANT_ADM_004 - Admin cannot create plant with negative price
+    Given I have "admin" plants API credentials
+    When I POST a new plant "Negative Orchid" with price -10.0 and quantity 5 under category 1
+    Then the plants API response status should be 400
+    And the response message should contain "Price must be greater than 0"
+
+  @user @rbac
+  Scenario: API_PLANT_USR_002 - User creation of plant is forbidden
+    Given I have "user" plants API credentials
+    When I POST a new plant "User Lily" with price 100.0 and quantity 5 under category 1
+    Then the plants API response status should be 403

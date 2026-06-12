@@ -27,4 +27,34 @@ Then('the {string} button should NOT be visible on the plants page', (label: str
   cy.contains('a,button', label).should('not.exist');
 });
 
-// TODO Bhawanthi: add steps for sortBy, filterByCategory, "Low" badge assertion.
+When('I filter the plant list by category {string}', (category: string) => {
+  page.filterByCategory(category);
+});
+
+When('I click the {string} column header to sort', (column: string) => {
+  page.sortByColumn(column);
+});
+
+Then('the {string} row should show the "Low" badge', (plantName: string) => {
+  page.lowBadgeFor(plantName).should('be.visible').and('contain.text', 'Low');
+});
+
+Then('every row in the plant list should belong to category {string}', (category: string) => {
+  page.categoryCells().then((cells) => {
+    expect(cells.length).to.be.greaterThan(0);
+    cells.forEach((cell) => expect(cell).to.eq(category));
+  });
+});
+
+Then('the plant names should be sorted in {word} order', (direction: string) => {
+  page.nameCells().then((names) => {
+    expect(names.length).to.be.greaterThan(0);
+    const ascending = [...names].sort((a, b) => a.localeCompare(b));
+    const expected = direction === 'ascending' ? ascending : ascending.reverse();
+    expect(names).to.deep.equal(expected);
+  });
+});
+
+Then('the {string} column header should show the {string} sort indicator', (column: string, arrow: string) => {
+  page.sortIndicator(column).should('contain.text', arrow);
+});

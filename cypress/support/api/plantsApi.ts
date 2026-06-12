@@ -11,11 +11,11 @@
 //   GET    /api/plants/category/{categoryId}        array under sub-category
 //   GET    /api/plants/summary                      { totalPlants, lowStockPlants }
 //   POST   /api/plants/category/{categoryId}        create plant under category
-//   PUT    /api/plants/{id}                         body: full Plant { name, price, quantity, category: {id} }
+//   PUT    /api/plants/{id}                         body: { name, price, quantity, categoryId }
 //   DELETE /api/plants/{id}
 //
-// IMPORTANT: PUT body uses { category: { id: <n> } } — NOT { categoryId }.
-//            GET /api/plants/{id} returns { categoryId } — flat (PlantEditResponseDTO).
+// IMPORTANT: PUT body uses a FLAT categoryId (verified against the live API) —
+//            same shape as GET /api/plants/{id} (PlantEditResponseDTO).
 // ============================================================
 import { apiClient, type ApiResponse } from './apiClient';
 
@@ -88,7 +88,7 @@ export const plantsApi = {
     apiClient.post<PlantDto>(`/api/plants/category/${categoryId}`, body, auth),
 
   // ---- OWNER: Tharindu (update) ----
-  /** PUT /api/plants/{id}. Body MUST use category: { id }. */
+  /** PUT /api/plants/{id}. Body uses a flat categoryId — see header comment. */
   update: (
     auth: Auth,
     id: number,
