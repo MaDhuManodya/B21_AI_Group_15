@@ -6,9 +6,9 @@ name: Cypress E2E Tests
 #   workflow_dispatch    → lets anyone trigger a manual run from the Actions tab
 on:
   push:
-    branches: [dev]
+    branches: [dev, 'feat/*']
   pull_request:
-    branches: [dev]
+    branches: [dev, 'feat/*']
   workflow_dispatch:
 
 # Cancel any in-progress run for the same ref when a newer commit arrives.
