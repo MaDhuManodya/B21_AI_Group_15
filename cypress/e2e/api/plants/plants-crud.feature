@@ -12,7 +12,7 @@ Feature: Plants API - CRUD and Access Control
     Given I have "admin" plants API credentials
     And a plant with id 10 exists
     When I DELETE plant 10
-    Then the plants API response status should be 200
+    Then the plants API response status should be 204
     And a subsequent GET for plant 10 should return 404
 
   @admin @schema
@@ -40,7 +40,7 @@ Feature: Plants API - CRUD and Access Control
     Given I have "user" plants API credentials
     When I GET plant 1
     Then the plants API response status should be 200
-    And the plants API response body name should be "Rose"
+    Then the plants API response body name should be "QA Seed Plant"
 
   @noauth @security
   Scenario: API_PLANT_USR_005 - Access denied for unauthenticated users

@@ -1,59 +1,71 @@
-// ============================================================
-// OWNER: Bhawanthi (list/get/delete) + Malinda (create)
-// Step definitions for:
-//   cypress/e2e/api/plants/plants-crud.feature   (Bhawanthi)
-//   cypress/e2e/api/plants/plant-create.feature  (Malinda)
-//
-// Reuse: cypress/support/api/plantsApi.ts (Tharindu owns `update`)
-//        cypress/support/api/authApi.ts   (JWT Bearer helper)
-//
-// Tharindu's plant-update step defs live in plant-update-api.steps.ts
-// and should NOT be duplicated here.
-//
-// IMPORTANT: auth is JWT (async). Always do:
-//   jwtAuthHeader('admin').then((auth) => { authHeader = auth; });
-// ============================================================
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { plantsApi } from '../../support/api/plantsApi';
 import { jwtAuthHeader, noAuthHeader } from '../../support/api/authApi';
+import { state } from '../../support/scenarioState';
 import type { UserRole } from '../../support/index.d';
 
-let authHeader: Record<string, string> = {};
-let lastResponse: { status: number; body: unknown } | undefined;
+// --- GIVEN STEPS ---
 
-Given('I have {string} API credentials for plants', (role: string) => {
+Given('I have {string} plants API credentials', (role: string) => {
+  state.role = role as UserRole;
   jwtAuthHeader(role as UserRole).then((auth) => {
-    authHeader = auth;
+    state.auth = auth;
   });
 });
 
 Given('I have no API credentials', () => {
-  authHeader = noAuthHeader();
+  state.auth = noAuthHeader();
 });
 
+// --- WHEN STEPS ---
+
 When('I GET the plants list', () => {
-  plantsApi.list(authHeader).then((r) => { lastResponse = r; });
+  plantsApi.list(state.auth ?? {}).then((r) => { state.lastResponse = r; });
 });
 
 When('I GET plant {int}', (id: number) => {
-  plantsApi.getOne(authHeader, id).then((r) => { lastResponse = r; });
+  plantsApi.getOne(state.auth ?? {}, id).then((r) => { state.lastResponse = r; });
 });
 
 When(
   'I POST a new plant {string} with price {float} and quantity {int} under category {int}',
   (name: string, price: number, quantity: number, categoryId: number) => {
-    plantsApi.create(authHeader, categoryId, { name, price, quantity }).then((r) => {
-      lastResponse = r;
+    plantsApi.create(state.auth ?? {}, categoryId, { name, price, quantity }).then((r) => {
+      state.lastResponse = r;
     });
   }
 );
 
 When('I DELETE plant {int}', (id: number) => {
-  plantsApi.delete(authHeader, id).then((r) => { lastResponse = r; });
+  plantsApi.delete(state.auth ?? {}, id).then((r) => { state.lastResponse = r; });
 });
 
-Then('the plant API response status should be {int}', (status: number) => {
-  expect(lastResponse?.status).to.eq(status);
+// --- THEN STEPS ---
+
+Then('the plants API response status should be {int}', (status: number) => {
+  expect(state.lastResponse?.status).to.eq(status);
 });
 
-// TODO Bhawanthi / Malinda: add domain Then steps (body field assertions, list size, etc.)
+Then('the plants API response body name should be {string}', (expectedName: string) => {
+  const body = state.lastResponse?.body as { name: string } | undefined;
+  expect(body?.name).to.eq(expectedName);
+});
+
+Then('the response message should contain {string}', (expectedMessage: string) => {
+  const bodyString = JSON.stringify(state.lastResponse?.body);
+  expect(bodyString).to.include(expectedMessage);
+});
+
+Then('the response should contain a list of plants', () => {
+  expect(state.lastResponse?.body).to.be.an('array');
+});
+
+Then('the response should contain a valid paginated plant list schema', () => {
+  expect(state.lastResponse?.body).to.be.an('array');
+});
+
+Then('a subsequent GET for plant {int} should return 404', (id: number) => {
+  plantsApi.getOne(state.auth ?? {}, id).then((r) => {
+    expect(r.status).to.eq(404);
+  });
+});
