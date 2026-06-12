@@ -37,8 +37,7 @@ export class PlantFormPage extends BasePage {
   selectFirstCategory(): Cypress.Chainable<string> {
     return this.categorySelect()
       .find('option')
-      .not('[value=""]')
-      .first()
+      .last()
       .then(($opt) => {
         const value = $opt.attr('value') ?? '';
         this.categorySelect().select(value);

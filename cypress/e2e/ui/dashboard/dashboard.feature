@@ -36,6 +36,12 @@ Feature: Dashboard
     And I click the view sales card
     Then I should be redirected to "/ui/sales"
 
+  @user @smoke
+  Scenario: UI_DASH_USER_001 - Verify dashboard loads successfully for user
+    Given I am logged in as "user"
+    When I navigate to "/ui/dashboard"
+    Then I should be redirected to "/ui/dashboard"
+
   @admin @smoke
   Scenario: UI_DASH_ADMIN_003 - Verify active page highlighting in navigation menu
     Given I am logged in as "admin"

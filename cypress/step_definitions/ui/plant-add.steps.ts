@@ -14,6 +14,7 @@ When('I open the Add Plant page', () => form.visitAdd());
 
 When('I fill in the plant name {string}', (name: string) => form.setName(name));
 When('I select the plant category {string}', (name: string) => form.selectCategory(name));
+When('I select a valid plant category', () => form.selectFirstCategory());
 When('I enter the plant price {string}', (price: string) => form.setPrice(price));
 When('I enter the plant quantity {string}', (qty: string) => form.setQuantity(qty));
 When('I click Save on the plant form', () => form.clickSave());
@@ -27,7 +28,7 @@ Then('I should see the {string} error message below the price field in red', (er
   form.priceError()
     .should('be.visible')
     .and('contain.text', errorMsg)
-    .and('have.css', 'color', 'rgb(255, 0, 0)'); // Assuming red text color
+    .and('have.css', 'color', 'rgb(220, 53, 69)'); // Assuming red text color
 });
 
 Then('the plant should not be created', () => {

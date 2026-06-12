@@ -22,3 +22,16 @@ When('I open the categories page', () => page.visit());
 Then('the categories table should be visible', () => {
   page.table().should('be.visible');
 });
+
+Then('no edit icon should be visible on the categories table', () => {
+  cy.get('a[href*="/edit/"]').should('not.exist');
+  cy.get('a, button').filter(':contains("Edit")').should('not.exist');
+});
+
+Then('I wait for 2 seconds', () => {
+  cy.wait(2000);
+  cy.get('a[href*="/edit/"]').first().then($el => {
+    cy.log('CLASSES: ' + $el.attr('class'));
+    cy.log('DISABLED: ' + $el.prop('disabled') + ' / ' + $el.attr('disabled'));
+  });
+});

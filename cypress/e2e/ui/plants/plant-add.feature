@@ -20,7 +20,7 @@ Feature: Add Plant (Admin form)
     Given I am logged in as "admin"
     When I open the Add Plant page
     And I fill in the plant name "Tulip"
-    And I select the plant category "Indoor"
+    And I select a valid plant category
     And I enter the plant price "0"
     And I enter the plant quantity "10"
     And I click Save on the plant form

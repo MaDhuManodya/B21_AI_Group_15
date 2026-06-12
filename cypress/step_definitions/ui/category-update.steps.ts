@@ -21,3 +21,28 @@ Then('I should see the {string} success message', (message: string) => {
     .should('be.visible')
     .and('contain.text', message);
 });
+
+When('I click the cancel button', () => form.clickCancel());
+
+Then('I should not see {string} on the category page', (text: string) => {
+  cy.contains(text).should('not.exist');
+});
+
+When('I click the close icon on the error banner', () => {
+  cy.get('.alert-danger .btn-close, .alert .btn-close, .btn-close').first().click();
+});
+
+Then('the error banner should be dismissed', () => {
+  cy.get('.alert-danger, .alert').should('not.exist');
+});
+
+Then('the parent category dropdown should contain available categories', () => {
+  form.parentSelect().find('option').should('have.length.greaterThan', 1);
+});
+
+Then('I should be able to select a category or leave it empty', () => {
+  form.parentSelect().select(0);
+  form.parentSelect().invoke('val').should('be.empty');
+  form.parentSelect().select(1);
+  form.parentSelect().invoke('val').should('not.be.empty');
+});
