@@ -5,10 +5,23 @@
 // ============================================================
 import { When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { CategoryFormPage } from '../../support/pages/CategoryFormPage';
+import { categoriesApi } from '../../support/api/categoriesApi';
+import { jwtAuthHeader } from '../../support/api/authApi';
 
 const form = new CategoryFormPage();
 
-When('I enter category name {string}', (name: string) => form.setName(name));
+When('I enter category name {string}', (name: string) => {
+  jwtAuthHeader('admin').then((auth) => {
+    categoriesApi.list(auth).then((res) => {
+      const list = Array.isArray(res.body) ? res.body : (res.body as any)?.content || [];
+      const existing = list.find((c: any) => c.name === name);
+      if (existing) {
+        categoriesApi.delete(auth, existing.id);
+      }
+    });
+  });
+  form.setName(name);
+});
 When('I click Save on the category form', () => form.clickSave());
 When('I click Cancel on the category form', () => form.clickCancel());
 

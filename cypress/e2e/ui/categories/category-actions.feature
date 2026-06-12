@@ -6,7 +6,7 @@
 @manodya @categories @ui @215550L
 Feature: Category Row Actions
 
-  @admin @smoke
+  @manodya @categories @ui @215550L @admin @smoke
   Scenario: UI_CATEGORY_ADMIN_005 - Verify Admin can edit and delete category
     Given I am logged in as "admin"
     And I navigate to "/ui/categories"
@@ -14,7 +14,7 @@ Feature: Category Row Actions
     And I confirm the delete prompt
     Then the category "0" should be removed from the list
 
-  @user @rbac
+  @manodya @categories @ui @215550L @user @rbac
   Scenario: UI_CATEGORY_USER_005 - Verify User cannot edit or delete category
     Given I am logged in as "user"
     And I navigate to "/ui/categories"
