@@ -1,0 +1,19 @@
+{
+  // When a team member opens this repo in VS Code, the editor will offer
+  // to install these extensions in one click.
+  "recommendations": [
+    // The extension this project is configured for — Cucumber Gherkin
+    // support: syntax highlighting, step autocomplete, jump-to-definition,
+    // undefined-step diagnostics.
+    "alexkrechik.cucumberautocomplete",
+
+    // Cypress test runner integration — pretty results in the Test panel.
+    "shelex.vscode-cy-helper"
+  ],
+  // Discourage installation of the older "Cucumber" extension which
+  // conflicts with cucumberautocomplete on .feature files.
+  "unwantedRecommendations": [
+    "stevejpurves.cucumber",
+    "CucumberOpen.cucumber-official"
+  ]
+}

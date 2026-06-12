@@ -8,7 +8,13 @@ allure-report/
 .env
 .env.local
 .idea/
-.vscode/
+
+# Ignore personal VS Code files, but commit the shared editor config
+# so every team member gets the same Cucumber autocomplete behaviour.
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
 *.log
 npm-debug.log*
 .DS_Store
