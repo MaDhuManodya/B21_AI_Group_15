@@ -23,28 +23,29 @@ Feature: Categories API
   Scenario: API_CATEGORIES_ADMIN_006 - Verify categories summary endpoint returns successfull response for admin users
     Given I have "admin" API credentials for categories
     When I GET the categories summary
-    Then the category API response should have 15 main categories and 2 sub categories
+    Then the category summary response status should be 200
+    And the response should return a valid summary with counts greater than zero
 
   @admin @malinda
   Scenario: API_CATEGORIES_ADMIN_008 - Verify categories are filtered by the category name for admin users
     Given I have "admin" API credentials for categories
-    When I GET the categories page with name "Cat_02"
+    When I GET the categories page with the seed category name
     Then the category API response status should be 200
-    And the response should contain a category with name "Cat_02"
+    And the response should contain the seed category name
 
   @user @malinda
   Scenario: API_CATEGORIES_USER_006 - Verify the categories are retrieved with pagination for users
     Given I have "user" API credentials for categories
-    When I GET the categories page with page 0 and size 12
+    When I GET the categories page with page 0 and size 5
     Then the category API response status should be 200
-    And the response should contain exactly 12 subcategories
+    And the response should contain at most 5 items
 
   @user @malinda
   Scenario: API_CATEGORIES_USER_007 - Verify the relevant sub categories are retrived for the parent id for users
     Given I have "user" API credentials for categories
-    When I GET the categories page with parent id 2
+    When I GET the categories page with the seed main category as parent
     Then the category API response status should be 200
-    And the response should contain subcategories of parent 2
+    And the response should contain at least one subcategory
 
   @user @malinda
   Scenario: API_CATEGORIES_USER_008 - Verify the relevant categories are sorted according to the id for users

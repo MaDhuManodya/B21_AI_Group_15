@@ -25,11 +25,42 @@
     "sale": { "quantity": 2 }
   },
   "malinda": {
-    "_comment": "Data specifically used by Malinda's test cases.",
-    "apiTestCategoryName": "Cat_02",
-    "apiTestParentId": 2,
-    "uiTestEditCategoryId": 8,
-    "uiTestCancelCategoryId": 1,
-    "uiTestPlantUpdateName": "Outdoor"
+    "_comment": "Data used by Malinda's test cases. IDs that depend on DB state are resolved at runtime via cy.task('db:seed').",
+    "_testCaseDataMap": {
+      "API_AUTH_ADMIN_001": "Uses admin credentials from users.json (admin.username / admin.password)",
+      "API_AUTH_USER_001": "Uses user credentials from users.json (user.username / user.password)",
+      "API_CATEGORIES_ADMIN_006": "Calls /api/categories/summary - asserts mainCategories > 0 (dynamic)",
+      "API_CATEGORIES_ADMIN_007": "Uses seed.category.name to filter categories via /api/categories/page?name=...",
+      "API_CATEGORIES_ADMIN_008": "Uses seed.category.name to filter categories via /api/categories/page?name=...",
+      "API_CATEGORIES_USER_006": "Calls /api/categories/page?page=0&size=5 - asserts response.length <= 5",
+      "API_CATEGORIES_USER_007": "Uses seed mainId (from db:seed task) as parentId query param",
+      "API_CATEGORIES_USER_008": "Calls /api/categories/page?sortField=id&sortDir=asc - asserts sorted",
+      "API_CATEGORIES_USER_009": "Calls /api/categories/page?sortField=name&sortDir=asc - asserts sorted",
+      "API_PLANT_ADMIN_006": "Uses seed.subId (from db:seed task) as categoryId; sends price -10.0 to trigger 400",
+      "API_PLANT_ADMIN_007": "Uses plant id 1 (guaranteed by db:seed); updates name/price/quantity",
+      "UI_DASH_ADMIN_001": "No specific data needed - just login as admin and navigate to /ui/dashboard",
+      "UI_DASH_ADMIN_002": "No specific data needed - verifies card click navigation",
+      "UI_DASH_ADMIN_003": "No specific data needed - verifies nav sidebar active class",
+      "UI_DASH_ADMIN_004": "No specific data needed - verifies summary card values visible",
+      "UI_DASH_USER_001": "No specific data needed - just login as user and navigate to /ui/dashboard",
+      "UI_PLANT_ADMIN_006": "Uses seed mainId (from db:seed task) for the edit category page",
+      "UI_PLANT_ADMIN_007": "Uses seed mainId (from db:seed task) for the edit category page; updates name to uiEditCategoryName",
+      "UI_PLANT_USER_006": "Uses seed mainId (from db:seed task) - user tries to access edit page, expects 403",
+      "UI_CATEGORY_USER_006": "No specific data needed - user opens /ui/categories and checks no edit icons",
+      "UI_CATEGORY_USER_007": "Uses seed mainId (from db:seed task) - admin cancels edit, expects redirect to /ui/categories",
+      "UI_CATEGORY_USER_008": "Uses seed mainId (from db:seed task) - checks parent dropdown has options",
+      "UI_CATEGORY_USER_009": "Uses seed mainId (from db:seed task) - user navigates to edit page, expects error banner"
+    },
+    "uiEditCategoryName": "Outdoor",
+    "plantUpdate": {
+      "name": "Valid Update Name",
+      "price": 150,
+      "quantity": 30
+    },
+    "plantNegativePrice": {
+      "name": "Tulip",
+      "price": -10.0,
+      "quantity": 5
+    }
   }
 }
