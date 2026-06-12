@@ -76,6 +76,11 @@ function adminCreds(): { username: string; password: string } {
   return { username: users.admin.username, password: users.admin.password };
 }
 
+function loadMockCategories(): { name: string; parentName?: string }[] {
+  const data = readJson<any>('test-data.json');
+  return data.malinda?.mockCategories || [];
+}
+
 // Token is cached for the whole Node process so we don't log in per spec.
 let cachedToken: string | null = null;
 
@@ -204,6 +209,23 @@ export async function seedDatabase(baseUrl: string): Promise<{ mainId: number; s
   const plantId = await ensurePlant(baseUrl, token, cfg, subId);
   await ensureSale(baseUrl, token, cfg, plantId);
 
+  // Seed mock categories for testing pagination and filtering
+  const mockCats = loadMockCategories();
+  for (const cat of mockCats) {
+    if (!cat.parentName) {
+      await ensureMainCategory(baseUrl, token, { category: { name: cat.name } } as any);
+    }
+  }
+  for (const cat of mockCats) {
+    if (cat.parentName) {
+      const list = await api(baseUrl, 'GET', '/api/categories', token);
+      const parent = asArray<CategoryRecord>(list.body).find(c => c.name === cat.parentName && (c.parentName === '-' || !c.parentName));
+      if (parent) {
+        await ensureSubCategory(baseUrl, token, { subCategory: { name: cat.name }, category: { name: cat.parentName } } as any, parent.id);
+      }
+    }
+  }
+
   return { mainId, subId, plantId };
 }
 
@@ -255,7 +277,22 @@ export async function cleanupDatabase(baseUrl: string): Promise<void> {
     const main = cats.find((c) => c.name === cfg.category.name && (c.parentName === '-' || !c.parentName));
     if (main) await api(baseUrl, 'DELETE', `/api/categories/${main.id}`, token);
 
-    console.log(`[seed] cleanup removed ${sales.length} sale(s) + seed plant + seed categories`);
+    // 4. Tear down mock categories (subcategories first)
+    const mockCats = loadMockCategories();
+    for (const cat of mockCats) {
+      if (cat.parentName) {
+        const mockSub = cats.find((c) => c.name === cat.name && c.parentName === cat.parentName);
+        if (mockSub) await api(baseUrl, 'DELETE', `/api/categories/${mockSub.id}`, token);
+      }
+    }
+    for (const cat of mockCats) {
+      if (!cat.parentName) {
+        const mockMain = cats.find((c) => c.name === cat.name && (c.parentName === '-' || !c.parentName));
+        if (mockMain) await api(baseUrl, 'DELETE', `/api/categories/${mockMain.id}`, token);
+      }
+    }
+
+    console.log(`[seed] cleanup removed ${sales.length} sale(s) + seed plant + seed categories + mock categories`);
   } catch (err) {
     console.warn(`[seed] cleanup encountered an error (ignored): ${(err as Error).message}`);
   }

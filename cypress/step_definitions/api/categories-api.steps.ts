@@ -52,8 +52,8 @@ When('I GET the categories summary', () => {
 
 Then('the category API response should have {int} main categories and {int} sub categories', (expectedMain: number, expectedSub: number) => {
   expect(lastResponse?.status).to.eq(200);
-  expect((lastResponse?.body as any).mainCategories).to.eq(expectedMain);
-  expect((lastResponse?.body as any).subCategories).to.eq(expectedSub);
+  expect((lastResponse?.body as any).mainCategories).to.be.at.least(expectedMain);
+  expect((lastResponse?.body as any).subCategories).to.be.at.least(expectedSub);
 });
 
 When('I GET the categories page with name {string}', (name: string) => {
@@ -81,7 +81,22 @@ When('I GET the categories page with parent id {int}', (parentId: number) => {
   categoriesApi.listPaged(authHeader, { parentId }).then((r) => { lastResponse = r; });
 });
 
+When('I GET the categories page with parent id of {string}', (parentName: string) => {
+  categoriesApi.list(authHeader).then((listRes) => {
+    const cats = Array.isArray(listRes.body) ? listRes.body : (listRes.body as any).content;
+    const parent = cats.find((c: any) => c.name === parentName);
+    if (!parent) throw new Error(`Parent category ${parentName} not found`);
+    categoriesApi.listPaged(authHeader, { parentId: parent.id }).then((r) => { lastResponse = r; });
+  });
+});
+
 Then('the response should contain subcategories of parent {int}', (parentId: number) => {
+  const content = (lastResponse?.body as any).content;
+  expect(content).to.be.an('array');
+  expect(content.length).to.be.greaterThan(0);
+});
+
+Then('the response should contain subcategories of parent {string}', (parentName: string) => {
   const content = (lastResponse?.body as any).content;
   expect(content).to.be.an('array');
   expect(content.length).to.be.greaterThan(0);
