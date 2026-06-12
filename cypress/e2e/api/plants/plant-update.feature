@@ -21,7 +21,7 @@ Feature: Plants API - Update
     Then the plants API response status should be 403
     And the plant 1 name should NOT be "HackedName"
 
-  @admin
+  @admin @malinda
   Scenario: API_PLANT_ADMIN_007 - Admin update plant with valid data
     Given I have "admin" plants API credentials
     And a plant with id 1 exists

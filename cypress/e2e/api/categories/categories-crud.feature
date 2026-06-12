@@ -19,41 +19,41 @@ Feature: Categories API
   #                API_CATEGORY_USER_001 (GET allowed), API_CATEGORY_USER_002 (POST 403),
   #                API_CATEGORY_USER_003 (DELETE 403).
 
-  @admin @smoke
+  @admin @smoke @malinda
   Scenario: API_CATEGORIES_ADMIN_006 - Verify categories summary endpoint returns successfull response for admin users
     Given I have "admin" API credentials for categories
     When I GET the categories summary
-    Then the category API response should have 8 main categories and 16 sub categories
+    Then the category API response should have 15 main categories and 2 sub categories
 
-  @admin
+  @admin @malinda
   Scenario: API_CATEGORIES_ADMIN_008 - Verify categories are filtered by the category name for admin users
     Given I have "admin" API credentials for categories
-    When I GET the categories page with name "SC_01A"
+    When I GET the categories page with name "Cat_02"
     Then the category API response status should be 200
-    And the response should contain a category with name "SC_01A"
+    And the response should contain a category with name "Cat_02"
 
-  @user
+  @user @malinda
   Scenario: API_CATEGORIES_USER_006 - Verify the categories are retrieved with pagination for users
     Given I have "user" API credentials for categories
     When I GET the categories page with page 0 and size 12
     Then the category API response status should be 200
     And the response should contain exactly 12 subcategories
 
-  @user
+  @user @malinda
   Scenario: API_CATEGORIES_USER_007 - Verify the relevant sub categories are retrived for the parent id for users
     Given I have "user" API credentials for categories
-    When I GET the categories page with parent id 11
+    When I GET the categories page with parent id 2
     Then the category API response status should be 200
-    And the response should contain subcategories of parent 11
+    And the response should contain subcategories of parent 2
 
-  @user
+  @user @malinda
   Scenario: API_CATEGORIES_USER_008 - Verify the relevant categories are sorted according to the id for users
     Given I have "user" API credentials for categories
     When I GET the categories page sorted by "id" in "asec" order
     Then the category API response status should be 200
     And the response categories should be sorted by "id" in "asc" order
 
-  @user
+  @user @malinda
   Scenario: API_CATEGORIES_USER_009 - Verify the categories are sorted according to name for users
     Given I have "user" API credentials for categories
     When I GET the categories page sorted by "name" in "asec" order

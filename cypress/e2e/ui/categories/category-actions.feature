@@ -15,7 +15,7 @@ Feature: Category Row Actions
   # TODO Manodya: implement edit/delete action scenarios.
   # Suggested IDs: UI_CATEGORY_ADMIN_008 (delete with prompt), UI_CATEGORY_USER_005 (no edit/delete icons).
 
-  @user @rbac
+  @user @rbac @malinda
   Scenario: UI_CATEGORY_USER_006 - Verify Edit action is not visible to non-admin user
     Given I am logged in as "user"
     When I open the categories page
