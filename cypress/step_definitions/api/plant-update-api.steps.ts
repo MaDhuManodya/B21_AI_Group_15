@@ -2,7 +2,6 @@
 // Step definitions for: cypress/e2e/api/plants/plant-update.feature
 // Covers IDs: API_PLANT_ADMIN_001, API_PLANT_USER_001
 // ============================================================
-
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { jwtAuthHeader } from '../../support/api/authApi';
 import { plantsApi, type PlantDto } from '../../support/api/plantsApi';

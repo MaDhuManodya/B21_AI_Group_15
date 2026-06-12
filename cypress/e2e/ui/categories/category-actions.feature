@@ -20,3 +20,10 @@ Feature: Category Row Actions
     And I navigate to "/ui/categories"
     Then no edit icon should be visible on the categories table
     And no delete icon should be visible on the categories table
+
+  @user @rbac @malinda
+  Scenario: UI_CATEGORY_USER_006 - Verify Edit action is not visible to non-admin user
+    Given I am logged in as "user"
+    When I open the categories page
+    Then the categories table should be visible
+    And no edit icon should be visible on the categories table

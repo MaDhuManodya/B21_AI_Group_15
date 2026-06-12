@@ -25,5 +25,30 @@
     "subCategory": { "name": "QASeedSub" },
     "plant": { "name": "QA Seed Plant", "price": 100.0, "quantity": 100 },
     "sale": { "quantity": 2, "count": 2 }
+  },
+  "malinda": {
+    "_comment": "Data specifically used by Malinda's test cases.",
+    "apiTestCategoryName": "Cat_02",
+    "apiTestParentId": 2,
+    "uiTestEditCategoryId": 8,
+    "uiTestCancelCategoryId": 1,
+    "uiTestPlantUpdateName": "Outdoor",
+    "mockCategories": [
+      { "name": "Cat_01" },
+      { "name": "Cat_02" },
+      { "name": "Cat_03" },
+      { "name": "Cat_04" },
+      { "name": "Cat_05" },
+      { "name": "Cat_06" },
+      { "name": "Cat_07" },
+      { "name": "Cat_08" },
+      { "name": "Cat_09" },
+      { "name": "Cat_10" },
+      { "name": "Cat_11" },
+      { "name": "Cat_12" },
+      { "name": "Cat_13" },
+      { "name": "Cat_14" },
+      { "name": "Cat_02_Sub_01", "parentName": "Cat_02" }
+    ]
   }
 }

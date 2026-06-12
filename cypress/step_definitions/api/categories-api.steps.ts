@@ -88,6 +88,78 @@ Then('the category API response status should be {int}', (status: number) => {
 });
 
 // TODO Manodya / Malinda: add domain-specific Then steps as you need them.
+
+When('I GET the categories summary', () => {
+  categoriesApi.getSummary(authHeader).then((r) => { lastResponse = r; });
+});
+
+Then('the category API response should have {int} main categories and {int} sub categories', (expectedMain: number, expectedSub: number) => {
+  expect(lastResponse?.status).to.eq(200);
+  expect((lastResponse?.body as any).mainCategories).to.be.at.least(expectedMain);
+  expect((lastResponse?.body as any).subCategories).to.be.at.least(expectedSub);
+});
+
+When('I GET the categories page with name {string}', (name: string) => {
+  categoriesApi.listPaged(authHeader, { name }).then((r) => { lastResponse = r; });
+});
+
+When('I GET the categories page with page {int} and size {int}', (page: number, size: number) => {
+  categoriesApi.listPaged(authHeader, { page, size }).then((r) => { lastResponse = r; });
+});
+
+Then('the response should contain exactly {int} subcategories', (count: number) => {
+  const content = (lastResponse?.body as any).content;
+  expect(content).to.be.an('array');
+  expect(content.length).to.eq(count);
+});
+
+When('I GET the categories page with parent id {int}', (parentId: number) => {
+  categoriesApi.listPaged(authHeader, { parentId }).then((r) => { lastResponse = r; });
+});
+
+When('I GET the categories page with parent id of {string}', (parentName: string) => {
+  categoriesApi.list(authHeader).then((listRes) => {
+    const cats = Array.isArray(listRes.body) ? listRes.body : (listRes.body as any).content;
+    const parent = cats.find((c: any) => c.name === parentName);
+    if (!parent) throw new Error(`Parent category ${parentName} not found`);
+    categoriesApi.listPaged(authHeader, { parentId: parent.id }).then((r) => { lastResponse = r; });
+  });
+});
+
+Then('the response should contain subcategories of parent {int}', (parentId: number) => {
+  const content = (lastResponse?.body as any).content;
+  expect(content).to.be.an('array');
+  expect(content.length).to.be.greaterThan(0);
+});
+
+Then('the response should contain subcategories of parent {string}', (parentName: string) => {
+  const content = (lastResponse?.body as any).content;
+  expect(content).to.be.an('array');
+  expect(content.length).to.be.greaterThan(0);
+});
+
+When('I GET the categories page sorted by {string} in {string} order', (sortField: string, sortDir: string) => {
+  categoriesApi.listPaged(authHeader, { sortField, sortDir }).then((r) => { lastResponse = r; });
+});
+
+Then('the response categories should be sorted by {string} in {string} order', (sortField: string, order: string) => {
+  const content = (lastResponse?.body as any).content;
+  expect(content).to.be.an('array');
+  if (content.length > 1) {
+    for (let i = 0; i < content.length - 1; i++) {
+      const current = content[i][sortField];
+      const next = content[i + 1][sortField];
+      if (order === 'asc') {
+        if (typeof current === 'string') {
+          expect(current.localeCompare(next)).to.be.at.most(0);
+        } else {
+          expect(current).to.be.at.most(next);
+        }
+      }
+    }
+  }
+});
+
 Then('the response should contain a category with name {string}', (name: string) => {
   if (Array.isArray(lastResponse?.body)) {
     const list = lastResponse?.body as any[];

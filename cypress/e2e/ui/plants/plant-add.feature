@@ -49,3 +49,14 @@ Feature: Add Plant (Admin form)
     And I fill in the plant form with name "ABCDEFGHIJKLMNOPQRSTUVWXYZ", category "QASeedSub", price "10" and quantity "5"
     And I click Save on the plant form
     Then I should see the plant name length validation error
+
+  @admin @negative @malinda
+  Scenario: UI_PLANT_ADMIN_006 - Verify price validation (must be > 0)
+    When I open the Add Plant page
+    And I fill in the plant name "Tulip"
+    And I select a valid plant category
+    And I enter the plant price "0"
+    And I enter the plant quantity "10"
+    And I click Save on the plant form
+    Then I should see the "Price must be greater than 0" error message below the price field in red
+    And the plant should not be created

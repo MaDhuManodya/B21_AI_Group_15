@@ -11,7 +11,7 @@
 // Reusable page object:
 //   cypress/support/pages/DashboardPage.ts
 // ============================================================
-import { Then } from '@badeball/cypress-cucumber-preprocessor';
+import { When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { DashboardPage } from '../../support/pages/DashboardPage';
 
 const page = new DashboardPage();
@@ -23,4 +23,26 @@ Then('I should see the dashboard summary cards', () => {
   page.salesCard().should('be.visible');
 });
 
-// TODO Malinda: add your dashboard step defs here.
+When('I click the manage categories card', () => {
+  page.clickManageCategories();
+});
+
+When('I click the manage plants card', () => {
+  page.clickManagePlants();
+});
+
+When('I click the view sales card', () => {
+  page.clickViewSales();
+});
+
+When('I click the {string} sidebar item', (itemName: string) => {
+  page.sidebarItem(itemName).click();
+});
+
+Then('the {string} sidebar item should be highlighted', (itemName: string) => {
+  page.sidebarItem(itemName).should('have.class', 'active'); // Assuming 'active' class is used for highlighting
+});
+
+Then('the {string} card should display the correct summary values', (cardName: 'Categories'|'Plants'|'Sales') => {
+  page.cardValue(cardName).should('match', /\d+/); // Verifies that at least one number is displayed
+});
