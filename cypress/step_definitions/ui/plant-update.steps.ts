@@ -16,11 +16,14 @@
 // ============================================================
 import { When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { PlantFormPage } from '../../support/pages/PlantFormPage';
+import { state } from '../../support/scenarioState';
 
 const form = new PlantFormPage();
 
 When('I open the edit page for plant {int}', (id: number) => {
-  form.visitEdit(id);
+  // Prefer the real plant id resolved by "a plant with id N exists";
+  // fall back to the literal Gherkin id if that Given wasn't run.
+  form.visitEdit(state.plantId ?? id);
 });
 
 Then('I should see the plant updated success message', () => {
