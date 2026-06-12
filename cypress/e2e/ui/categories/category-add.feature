@@ -1,19 +1,22 @@
 # ============================================================
 # OWNER: Manodya
 # MODULE: Add Category form (/ui/categories/add)
-# SRS REFERENCE: §5.2 — Add / Edit Category Page
-# COVERAGE NOTES:
-#   - Category Name (required, 3-10 chars)
-#   - Parent Category (optional — empty = main category)
-#   - Save / Cancel buttons
-#   - Validation errors below field
-#   - User -> 403 if accessing /ui/categories/add
 # TAGS: @manodya @categories @ui  + @admin|@user + @smoke/@negative/@rbac
-# REUSE: CategoryFormPage.ts (add half — TODO Manodya).
 # ============================================================
-@manodya @categories @ui
+@manodya @categories @ui @215550L
 Feature: Add Category
 
-  # TODO Manodya: implement Add Category scenarios.
-  # Suggested IDs: UI_CATEGORY_ADMIN_006 (add success), UI_CATEGORY_ADMIN_007 (name validation 3-10),
-  #                UI_CATEGORY_USER_004 (403 on /ui/categories/add).
+  @admin @smoke
+  Scenario: UI_CATEGORY_ADMIN_004 - Verify Admin can add new category
+    Given I am logged in as "admin"
+    And I navigate to "/ui/categories"
+    When I click the "Add Category" button
+    And I enter category name "NewCatTest"
+    And I click Save on the category form
+    Then I should see the category form success alert
+
+  @user @rbac
+  Scenario: UI_CATEGORY_USER_005 - Verify User cannot add edit or delete category
+    Given I am logged in as "user"
+    And I navigate to "/ui/categories"
+    Then the "Add Category" button should NOT be visible on the categories page

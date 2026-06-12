@@ -20,4 +20,10 @@ Then('I should see the category name field error', () => {
   form.nameError().should('be.visible');
 });
 
-// TODO Manodya: add scenarios for parent-category selection, boundary lengths.
+When('I select parent category {string}', (parentName: string) => {
+  form.selectParent(parentName);
+});
+
+Then('I should see the category name error for length', () => {
+  form.nameError().should('be.visible');
+});

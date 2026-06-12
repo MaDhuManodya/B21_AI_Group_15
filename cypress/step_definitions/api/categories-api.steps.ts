@@ -45,3 +45,26 @@ Then('the category API response status should be {int}', (status: number) => {
 });
 
 // TODO Manodya / Malinda: add domain-specific Then steps as you need them.
+Then('the response should contain a category with name {string}', (name: string) => {
+  if (Array.isArray(lastResponse?.body)) {
+    const list = lastResponse?.body as any[];
+    const found = list.some(item => item.name === name);
+    expect(found).to.be.true;
+  } else if ((lastResponse?.body as any)?.content) {
+    const list = (lastResponse?.body as any).content as any[];
+    const found = list.some(item => item.name === name);
+    expect(found).to.be.true;
+  } else {
+    expect((lastResponse?.body as any)?.name).to.eq(name);
+  }
+});
+
+Then('the response should contain at least one category', () => {
+  if (Array.isArray(lastResponse?.body)) {
+    expect((lastResponse?.body as any[]).length).to.be.greaterThan(0);
+  } else if ((lastResponse?.body as any)?.content) {
+    expect(((lastResponse?.body as any).content as any[]).length).to.be.greaterThan(0);
+  } else {
+    throw new Error('Response is not a list');
+  }
+});

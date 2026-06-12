@@ -29,5 +29,11 @@ export class CategoryFormPage extends BasePage {
   clickSave()   { this.saveButton().click(); }
   clickCancel() { this.cancelButton().click(); }
 
-  // TODO Manodya / Malinda: fillAndSave({ name, parent? }) — convenience helper
+  fillAndSave({ name, parent }: { name: string; parent?: string }) {
+    this.setName(name);
+    if (parent) {
+      this.selectParent(parent);
+    }
+    this.clickSave();
+  }
 }
