@@ -1,9 +1,9 @@
 // ============================================================
-// OWNER: Bhawanthi
+// OWNER: Bhawanthi Pabasara (215540G)
 // Step definitions for: cypress/e2e/ui/plants/plant-actions.feature
 // Page object: cypress/support/pages/PlantListPage.ts
 // ============================================================
-import { Then } from '@badeball/cypress-cucumber-preprocessor';
+import { When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { PlantListPage } from '../../support/pages/PlantListPage';
 
 const page = new PlantListPage();
@@ -12,9 +12,18 @@ Then('the plants table should be visible', () => {
   page.table().should('be.visible');
 });
 
-// TODO Bhawanthi: implement steps for:
-//   When  I click the edit icon on plant row {int}
-//   When  I click the delete icon on plant row {int}
-//   When  I confirm the plant delete prompt
-//   Then  no edit icon should be visible on the plants table
-//   Then  no delete icon should be visible on the plants table
+When('I delete the plant {string} from the list and confirm the prompt', (name: string) => {
+  cy.on('window:confirm', (msg) => {
+    expect(msg).to.eq('Delete this plant?');
+    return true;
+  });
+  page.deleteButtonFor(name).click();
+});
+
+Then('no edit icon should be visible on the plants table', () => {
+  page.editIcons().should('not.exist');
+});
+
+Then('no delete icon should be visible on the plants table', () => {
+  page.deleteForms().should('not.exist');
+});
