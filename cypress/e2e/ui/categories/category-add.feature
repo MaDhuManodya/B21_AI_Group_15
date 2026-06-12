@@ -3,7 +3,7 @@
 # MODULE: Add Category form (/ui/categories/add)
 # TAGS: @manodya @categories @ui  + @admin|@user + @smoke/@negative/@rbac
 # ============================================================
-@manodya @categories @ui
+@manodya @categories @ui @215550L
 Feature: Add Category
 
   @admin @smoke

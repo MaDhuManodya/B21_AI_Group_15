@@ -3,7 +3,7 @@
 # MODULE: Category list page (/ui/categories)
 # TAGS: @manodya @categories @ui  + @admin|@user + @smoke/@negative/@rbac
 # ============================================================
-@manodya @categories @ui
+@manodya @categories @ui @215550L
 Feature: Category List
 
   @admin @smoke

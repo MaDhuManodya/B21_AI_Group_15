@@ -3,7 +3,7 @@
 # MODULE: Categories API — list, create, update, delete
 # TAGS: @manodya @categories @api  + @admin|@user + @smoke/@negative/@rbac
 # ============================================================
-@manodya @categories @api
+@manodya @categories @api @215550L
 Feature: Categories API
 
   @admin @smoke

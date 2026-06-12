@@ -3,7 +3,7 @@
 # MODULE: Category list — row actions (edit icon + delete icon)
 # TAGS: @manodya @categories @ui  + @admin|@user + @smoke/@rbac
 # ============================================================
-@manodya @categories @ui
+@manodya @categories @ui @215550L
 Feature: Category Row Actions
 
   @admin @smoke
