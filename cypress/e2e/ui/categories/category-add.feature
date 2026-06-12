@@ -3,7 +3,7 @@
 # MODULE: Add Category form (/ui/categories/add)
 # TAGS: @manodya @categories @ui  + @admin|@user + @smoke/@negative/@rbac
 # ============================================================
-@manodya @categories @ui @215550L
+@manodya @categories @ui @215550L @epic("UI") @feature("Categories") @story("Create") @owner("Manodya") @severity("normal")
 Feature: Add Category
 
   @manodya @categories @ui @215550L @admin @smoke
@@ -15,7 +15,7 @@ Feature: Add Category
     And I click Save on the category form
     Then I should see the category form success alert
 
-  @manodya @categories @ui @215550L @user @rbac
+  @manodya @categories @ui @215550L @user @rbac @severity("critical")
   Scenario: UI_CATEGORY_USER_005 - Verify User cannot add edit or delete category
     Given I am logged in as "user"
     And I navigate to "/ui/categories"

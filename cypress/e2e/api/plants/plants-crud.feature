@@ -4,7 +4,7 @@
 # SRS REFERENCE: §5.5, §6.1 — Plant CRUD and Access Control
 # TEST IDS: API_PLANT_ADM_003, API_PLANT_ADM_005, API_PLANT_USR_001, API_PLANT_USR_003, API_PLANT_USR_004, API_PLANT_USR_005
 # ============================================================
-@bhawanthi_pabasara @plants @api
+@bhawanthi_pabasara @plants @api @epic("API") @feature("Plants") @story("CRUD-and-Access-Control") @owner("Bhawanthi-Pabasara") @severity("normal")
 Feature: Plants API - CRUD and Access Control
 
   @admin @delete
@@ -29,7 +29,7 @@ Feature: Plants API - CRUD and Access Control
     Then the plants API response status should be 200
     And the response should contain a list of plants
 
-  @user @rbac
+  @user @rbac @severity("critical")
   Scenario: API_PLANT_USR_003 - User cannot delete a plant
     Given I have "user" plants API credentials
     When I DELETE plant 1
@@ -42,7 +42,7 @@ Feature: Plants API - CRUD and Access Control
     Then the plants API response status should be 200
     Then the plants API response body name should be "QA Seed Plant"
 
-  @noauth @security
+  @noauth @security @severity("critical")
   Scenario: API_PLANT_USR_005 - Access denied for unauthenticated users
     Given I have no API credentials
     When I GET the plants list

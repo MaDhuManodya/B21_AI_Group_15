@@ -13,7 +13,7 @@
 #   Then  I should see {string}
 #   Then  I should be redirected to {string}
 # ============================================================
-@malinda @dashboard @ui
+@malinda @dashboard @ui @epic("UI") @feature("Dashboard") @story("Navigation") @owner("Malinda") @severity("normal")
 Feature: Dashboard
 
   @admin @smoke
@@ -42,7 +42,7 @@ Feature: Dashboard
     When I navigate to "/ui/dashboard"
     Then I should be redirected to "/ui/dashboard"
 
-  @admin @smoke
+  @admin @smoke @severity("blocker")
   Scenario: UI_DASH_ADMIN_003 - Verify active page highlighting in navigation menu
     Given I am logged in as "admin"
     When I navigate to "/ui/dashboard"

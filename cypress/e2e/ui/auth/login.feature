@@ -4,7 +4,7 @@
 # Other login-validation scenarios (empty fields, wrong password)
 # can be added here if a member needs them.
 # ============================================================
-@auth @ui @smoke
+@auth @ui @smoke @epic("UI") @feature("Authentication") @story("Login") @owner("Malinda") @severity("critical")
 Feature: Login
 
   Scenario: Admin can log in with valid credentials

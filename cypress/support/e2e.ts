@@ -4,7 +4,7 @@
 // Adds: allure plugin, custom commands, fail-screenshot hook,
 //       per-scenario state reset, DB seeding.
 // ============================================================
-import '@shelex/cypress-allure-plugin';
+import 'allure-cypress';
 import './commands';
 import { resetState } from './scenarioState';
 

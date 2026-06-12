@@ -2,7 +2,7 @@
 # MODULE: Edit Plant page (/ui/plants/edit/{id})
 # SRS REFERENCE: §6.2 — Add / Edit Plant Page
 # ============================================================
-@tharindu @plants @ui
+@tharindu @plants @ui @epic("UI") @feature("Plants") @story("Update") @owner("Tharindu") @severity("normal")
 Feature: Edit Plant
 
   @admin @smoke
@@ -18,7 +18,7 @@ Feature: Edit Plant
     Then I should see the plant updated success message
     And I should be redirected to "/ui/plants"
 
-  @user @rbac
+  @user @rbac @severity("critical")
   Scenario: UI_PLANT_USER_001 - Normal user is denied access to the edit page
     Given I am logged in as "user"
     When I navigate to "/ui/plants/edit/1"

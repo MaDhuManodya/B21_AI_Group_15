@@ -14,7 +14,7 @@
 #
 # REMAINING (Malinda): UI_PLANT_USER_001 — User gets 403 when accessing /ui/plants/add directly.
 # ============================================================
-@bhawanthi_pabasara @plants @ui
+@bhawanthi_pabasara @plants @ui @epic("UI") @feature("Plants") @story("Create") @owner("Bhawanthi-Pabasara") @severity("normal")
 Feature: Add Plant (Admin form)
 
   Background:
@@ -30,7 +30,7 @@ Feature: Add Plant (Admin form)
     And I should see "Z-Plant-Pabasara-AddUI"
     And I delete the plant "Z-Plant-Pabasara-AddUI" via the API
 
-  @admin @negative
+  @admin @negative @severity("minor")
   Scenario: UI_PLANT_ADM_002 - Form validation when mandatory fields are empty
     When I open the Add Plant page
     And I click Save on the plant form
@@ -39,7 +39,7 @@ Feature: Add Plant (Admin form)
     And I should see the plant price validation error
     And I should see the plant quantity validation error
 
-  @admin @negative @boundary
+  @admin @negative @boundary @severity("minor")
   Scenario: UI_PLANT_ADM_003 - Plant Name length boundary validation (3-25 characters)
     When I open the Add Plant page
     And I fill in the plant form with name "AB", category "QASeedSub", price "10" and quantity "5"
@@ -50,7 +50,7 @@ Feature: Add Plant (Admin form)
     And I click Save on the plant form
     Then I should see the plant name length validation error
 
-  @admin @negative @malinda
+  @admin @negative @malinda @owner("Malinda") @severity("minor")
   Scenario: UI_PLANT_ADMIN_006 - Verify price validation (must be > 0)
     When I open the Add Plant page
     And I fill in the plant name "Tulip"

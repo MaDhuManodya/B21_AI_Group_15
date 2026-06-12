@@ -3,7 +3,7 @@
 # MODULE: Category list — row actions (edit icon + delete icon)
 # TAGS: @manodya @categories @ui  + @admin|@user + @smoke/@rbac
 # ============================================================
-@manodya @categories @ui @215550L
+@manodya @categories @ui @215550L @epic("UI") @feature("Categories") @story("Row-Actions") @owner("Manodya") @severity("normal")
 Feature: Category Row Actions
 
   @manodya @categories @ui @215550L @admin @smoke
@@ -14,14 +14,14 @@ Feature: Category Row Actions
     And I confirm the delete prompt
     Then the category "0" should be removed from the list
 
-  @manodya @categories @ui @215550L @user @rbac
+  @manodya @categories @ui @215550L @user @rbac @severity("critical")
   Scenario: UI_CATEGORY_USER_005 - Verify User cannot edit or delete category
     Given I am logged in as "user"
     And I navigate to "/ui/categories"
     Then no edit icon should be visible on the categories table
     And no delete icon should be visible on the categories table
 
-  @user @rbac @malinda
+  @user @rbac @malinda @owner("Malinda") @severity("critical")
   Scenario: UI_CATEGORY_USER_006 - Verify Edit action is not visible to non-admin user
     Given I am logged in as "user"
     When I open the categories page

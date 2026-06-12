@@ -9,7 +9,7 @@
 # TAGS: @malinda @categories @api  + @admin|@user + @smoke/@negative/@rbac
 # REUSE: cypress/support/api/categoriesApi.ts (update method — TODO Malinda).
 # ============================================================
-@malinda @categories @api
+@malinda @categories @api @epic("API") @feature("Categories") @story("Update") @owner("Malinda") @severity("normal")
 Feature: Categories API — Update
 
   # TODO Malinda: write update scenarios here.

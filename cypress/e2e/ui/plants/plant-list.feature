@@ -15,7 +15,7 @@
 # TAGS: @bhawanthi_pabasara @plants @ui  + @admin|@user + @smoke/@negative
 # REUSE: PlantListPage.ts
 # ============================================================
-@bhawanthi_pabasara @plants @ui
+@bhawanthi_pabasara @plants @ui @epic("UI") @feature("Plants") @story("Read") @owner("Bhawanthi-Pabasara") @severity("normal")
 Feature: Plant List
 
   @admin @smoke
@@ -45,7 +45,7 @@ Feature: Plant List
     And I filter the plant list by category "QASeedSub"
     Then every row in the plant list should belong to category "QASeedSub"
 
-  @user @negative
+  @user @negative @severity("minor")
   Scenario: UI_PLANT_USR_004 - Empty state message is shown when search returns no results
     Given I am logged in as "user"
     When I open the plants page

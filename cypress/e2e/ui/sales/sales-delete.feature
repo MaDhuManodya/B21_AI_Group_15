@@ -2,7 +2,7 @@
 # MODULE: Sales list — Delete action
 # SRS REFERENCE: §7.1 — Admin-Specific Features (Delete requires confirmation prompt)
 # ============================================================
-@tharindu @sales @ui
+@tharindu @sales @ui @epic("UI") @feature("Sales") @story("Delete") @owner("Tharindu") @severity("critical")
 Feature: Delete Sale Record
 
   @admin

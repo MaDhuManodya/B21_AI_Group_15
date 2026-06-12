@@ -2,7 +2,7 @@
 # RESOURCE: GET /api/sales, GET /api/sales/{id}
 # SRS REFERENCE: §7 — Sales (read-only for User)
 # ============================================================
-@tharindu @sales @api
+@tharindu @sales @api @epic("API") @feature("Sales") @story("Read") @owner("Tharindu") @severity("critical")
 Feature: Sales API - Read
 
   @admin

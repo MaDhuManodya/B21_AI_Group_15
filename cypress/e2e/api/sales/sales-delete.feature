@@ -2,7 +2,7 @@
 # RESOURCE: DELETE /api/sales/{id}
 # SRS REFERENCE: §7 — Sales (Admin only)
 # ============================================================
-@tharindu @sales @api
+@tharindu @sales @api @epic("API") @feature("Sales") @story("Delete") @owner("Tharindu") @severity("critical")
 Feature: Sales API - Delete
 
   @admin
@@ -13,7 +13,7 @@ Feature: Sales API - Delete
     Then the sales API response status should be one of 200 or 204
     And GET the stored sale by id should return 404
 
-  @user @rbac
+  @user @rbac @severity("blocker")
   Scenario: API_SALES_USER_003 - Normal user DELETE sale returns 403
     Given I have "user" sales API credentials
     And a sale record exists

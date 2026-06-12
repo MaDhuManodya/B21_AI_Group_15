@@ -3,7 +3,7 @@
 # MODULE: Category list page (/ui/categories)
 # TAGS: @manodya @categories @ui  + @admin|@user + @smoke/@negative/@rbac
 # ============================================================
-@manodya @categories @ui @215550L
+@manodya @categories @ui @215550L @epic("UI") @feature("Categories") @story("Read") @owner("Manodya") @severity("normal")
 Feature: Category List
 
   @manodya @categories @ui @215550L @admin @smoke
@@ -27,7 +27,7 @@ Feature: Category List
     When I filter categories by parent "QASeedTop"
     Then the categories table should be visible
 
-  @manodya @categories @ui @215550L @user @smoke @rbac
+  @manodya @categories @ui @215550L @user @smoke @rbac @severity("critical")
   Scenario: UI_CATEGORY_USER_001 - Verify category page visible to User
     Given I am logged in as "user"
     When I navigate to "/ui/categories"

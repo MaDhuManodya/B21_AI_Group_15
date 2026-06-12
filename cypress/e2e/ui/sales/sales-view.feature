@@ -2,7 +2,7 @@
 # MODULE: Sales list page (/ui/sales)
 # SRS REFERENCE: §7.1 — Sales List Page
 # ============================================================
-@tharindu @sales @ui
+@tharindu @sales @ui @epic("UI") @feature("Sales") @story("Read") @owner("Tharindu") @severity("critical")
 Feature: View Sales List
 
   @admin

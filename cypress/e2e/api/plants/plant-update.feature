@@ -3,7 +3,7 @@
 # SRS REFERENCE: §6.2 — Edit Plant (Admin only)
 # TEST IDS: API_PLANT_ADM_002
 # ============================================================
-@plants @api
+@plants @api @epic("API") @feature("Plants") @story("Update") @owner("Bhawanthi-Pabasara") @severity("normal")
 Feature: Plants API - Update
 
   @admin @smoke @bhawanthi_pabasara
@@ -16,7 +16,7 @@ Feature: Plants API - Update
     And a subsequent GET for that plant should show name "Z-Plant-Pabasara-Updated" price 250.0 and quantity 30
     And I DELETE that plant
 
-  @admin @smoke @tharindu
+  @admin @smoke @tharindu @owner("Tharindu")
   Scenario: API_PLANT_ADMIN_001 - Admin updates a plant via PUT
     Given I have "admin" plants API credentials
     And a plant with id 1 exists
@@ -25,7 +25,7 @@ Feature: Plants API - Update
     And the plants API response body name should be "Updated Plant"
     And the plant 1 name should be "Updated Plant"
 
-  @user @rbac @tharindu
+  @user @rbac @tharindu @owner("Tharindu") @severity("critical")
   Scenario: API_PLANT_USER_001 - Normal user PUT plant returns 403
     Given I have "user" plants API credentials
     And a plant with id 1 exists
@@ -33,7 +33,7 @@ Feature: Plants API - Update
     Then the plants API response status should be 403
     And the plant 1 name should NOT be "Hack Attempt"
 
-  @admin @malinda
+  @admin @malinda @owner("Malinda")
   Scenario: API_PLANT_ADMIN_007 - Admin update plant with valid data
     Given I have "admin" plants API credentials
     And a plant with id 1 exists

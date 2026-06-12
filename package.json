@@ -13,7 +13,7 @@
     "cy:run:malinda": "cypress run --env tags=@malinda",
     "cy:run:bhawanthi": "cypress run --env tags=@bhawanthi_pabasara",
     "cy:run:manodya": "cypress run --env tags=@manodya",
-    "allure:generate": "allure generate reports/allure-results --clean -o reports/allure-report",
+    "allure:generate": "node scripts/prepare-allure-results.js && allure generate reports/allure-results --clean -o reports/allure-report",
     "allure:open": "allure open reports/allure-report",
     "report": "npm run allure:generate && npm run allure:open",
     "typecheck": "tsc --noEmit"
@@ -21,10 +21,12 @@
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^20.1.2",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.2",
-    "@shelex/cypress-allure-plugin": "^2.40.2",
     "@types/node": "^20.11.0",
     "allure-commandline": "^2.27.0",
+    "allure-cypress": "^3.10.0",
+    "allure-js-commons": "^3.10.0",
     "cypress": "^13.6.4",
+    "cypress-on-fix": "^1.1.0",
     "esbuild": "^0.20.0",
     "typescript": "^5.3.3"
   }

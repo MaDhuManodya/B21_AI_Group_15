@@ -2,7 +2,8 @@ import { defineConfig } from 'cypress';
 import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
 import createEsbuildPlugin from '@badeball/cypress-cucumber-preprocessor/esbuild';
-import allureWriter from '@shelex/cypress-allure-plugin/writer';
+import { allureCypress } from 'allure-cypress/reporter';
+import cypressOnFix from 'cypress-on-fix';
 import { seedDatabase, cleanupDatabase } from './cypress/support/seed/dbSeed';
 
 export default defineConfig({
@@ -21,14 +22,12 @@ export default defineConfig({
     retries: { runMode: 1, openMode: 0 },
     env: {
       apiBaseUrl: 'http://localhost:8080',
-      // @shelex/cypress-allure-plugin flags
-      allure: true,                                    // enable Allure result writing
-      allureResultsPath: 'reports/allure-results',     // match `allure generate` input dir
-      allureReuseAfterSpec: true,                      // attach screenshots/videos after each spec
-      allureAddVideoOnPass: false,
-      allureAttachRequests: true,                      // include cy.request bodies in steps
     },
-    async setupNodeEvents(on, config) {
+    async setupNodeEvents(rawOn, config) {
+      // cypress-on-fix lets multiple plugins (cucumber preprocessor + allure
+      // + our own after:run hook) register handlers for the same event.
+      const on = cypressOnFix(rawOn);
+
       await addCucumberPreprocessorPlugin(on, config);
       on(
         'file:preprocessor',
@@ -39,7 +38,10 @@ export default defineConfig({
           plugins: [createEsbuildPlugin(config) as any],
         })
       );
-      allureWriter(on, config);
+
+      allureCypress(on, config, {
+        resultsDir: 'reports/allure-results',
+      });
 
       // --- DB seeding (Tharindu) ---
       // Base URL the seed module talks to (same as the API tests).

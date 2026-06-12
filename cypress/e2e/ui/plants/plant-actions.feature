@@ -10,7 +10,7 @@
 # TAGS: @bhawanthi_pabasara @plants @ui  + @admin|@user + @smoke/@rbac
 # REUSE: PlantListPage.ts
 # ============================================================
-@bhawanthi_pabasara @plants @ui
+@bhawanthi_pabasara @plants @ui @epic("UI") @feature("Plants") @story("Row-Actions") @owner("Bhawanthi-Pabasara") @severity("normal")
 Feature: Plant Row Actions
 
   @admin @smoke
@@ -23,7 +23,7 @@ Feature: Plant Row Actions
     When I delete the plant "Z-Plant-Pabasara-DeleteUI" from the list and confirm the prompt
     Then I should NOT see "Z-Plant-Pabasara-DeleteUI"
 
-  @user @rbac
+  @user @rbac @severity("critical")
   Scenario: UI_PLANT_USR_001 - Add a Plant button and edit/delete icons are hidden for a normal user
     Given I am logged in as "user"
     When I open the plants page

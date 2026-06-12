@@ -3,7 +3,7 @@
 # MODULE: Auth API — POST (login)
 # ENDPOINT: POST /api/auth/login
 # ============================================================
-@malinda @auth @api
+@malinda @auth @api @epic("API") @feature("Authentication") @story("Login") @owner("Malinda") @severity("critical")
 Feature: Auth API
 
   @admin @smoke

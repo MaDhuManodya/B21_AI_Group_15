@@ -2,7 +2,7 @@
 # MODULE: Sell Plant page (/ui/sales/new)
 # SRS REFERENCE: §7.2 — Sell Plant Page
 # ============================================================
-@tharindu @sales @ui
+@tharindu @sales @ui @epic("UI") @feature("Sales") @story("Create") @owner("Tharindu") @severity("critical")
 Feature: Sell Plant
 
   @admin @smoke
@@ -16,7 +16,7 @@ Feature: Sell Plant
     Then I should be redirected to "/ui/sales"
     And the sold plant should appear in the sales list
 
-  @admin @negative
+  @admin @negative @severity("minor")
   Scenario: UI_SALES_ADMIN_002 - Quantity 0 shows validation error
     Given I am logged in as "admin"
     When I navigate to "/ui/sales/new"
