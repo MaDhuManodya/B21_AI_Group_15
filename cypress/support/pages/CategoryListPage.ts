@@ -27,9 +27,24 @@ export class CategoryListPage extends BasePage {
     this.searchButton().click();
   }
 
-  // TODO Manodya: filterByParent(name: string)
-  // TODO Manodya: sortBy(column: 'ID'|'Name'|'Parent')
-  // TODO Manodya: clickEditOnRow(index: number)
-  // TODO Manodya: clickDeleteOnRow(index: number)
-  // TODO Manodya: confirmDelete()
+  filterByParent(name: string) {
+    this.parentFilter().select(name);
+    this.searchButton().click();
+  }
+
+  sortBy(column: 'ID'|'Name'|'Parent') {
+    this.table().find('thead th').contains(new RegExp(`^${column}$`, 'i')).click();
+  }
+
+  clickEditOnRow(index: number) {
+    this.rows().eq(index).find('[aria-label*="Edit" i], [title*="Edit" i], button:contains("Edit")').click();
+  }
+
+  clickDeleteOnRow(index: number) {
+    this.rows().eq(index).find('[aria-label*="Delete" i], [title*="Delete" i], button:contains("Delete")').click();
+  }
+
+  confirmDelete() {
+    cy.contains('button', /Confirm|Delete|Yes/i).filter(':visible').click();
+  }
 }

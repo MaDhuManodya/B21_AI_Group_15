@@ -24,4 +24,14 @@ Then('the {string} button should NOT be visible on the categories page', (label:
   cy.contains('a,button', label).should('not.exist');
 });
 
-// TODO Manodya: add steps for sortBy, filterByParent, clickEdit, clickDelete.
+When('I filter categories by parent {string}', (parentName: string) => {
+  page.filterByParent(parentName);
+});
+
+When('I sort categories by {string}', (column: string) => {
+  page.sortBy(column as 'ID' | 'Name' | 'Parent');
+});
+
+Then('the empty message should be visible', () => {
+  page.emptyMessage().should('be.visible');
+});
