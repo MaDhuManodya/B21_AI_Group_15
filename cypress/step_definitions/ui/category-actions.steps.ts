@@ -27,9 +27,6 @@ When('I click the delete icon on category row {int}', (index: number) => {
   page.clickDeleteOnRow(index);
 });
 
-When('I confirm the delete prompt', () => {
-  page.confirmDelete();
-});
 
 Then('the category {string} should be removed from the list', (name: string) => {
   const targetName = name === '0' && (state as any).deletedCategoryName ? (state as any).deletedCategoryName : name;

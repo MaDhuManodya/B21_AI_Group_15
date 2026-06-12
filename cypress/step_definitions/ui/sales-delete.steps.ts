@@ -24,9 +24,6 @@ When('I click the delete icon on the first sales row', () => {
   page.clickDeleteOnRow(0);
 });
 
-When('I confirm the delete prompt', () => {
-  page.confirmDelete();
-});
 
 Then('the sales row count should decrease by 1', () => {
   cy.reload();
