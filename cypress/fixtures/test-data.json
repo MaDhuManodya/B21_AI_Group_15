@@ -23,5 +23,13 @@
     "subCategory": { "name": "QASeedSub" },
     "plant": { "name": "QA Seed Plant", "price": 100.0, "quantity": 100 },
     "sale": { "quantity": 2 }
+  },
+  "malinda": {
+    "_comment": "Data specifically used by Malinda's test cases.",
+    "apiTestCategoryName": "Cat_02",
+    "apiTestParentId": 2,
+    "uiTestEditCategoryId": 8,
+    "uiTestCancelCategoryId": 1,
+    "uiTestPlantUpdateName": "Outdoor"
   }
 }
