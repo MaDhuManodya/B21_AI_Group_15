@@ -30,9 +30,9 @@ Feature: Categories API
   @user @malinda
   Scenario: API_CATEGORIES_USER_007 - Verify the relevant sub categories are retrived for the parent id for users
     Given I have "user" API credentials for categories
-    When I GET the categories page with parent id of "Cat_02"
+    When I GET the categories page with parent id of "QASeedTop"
     Then the category API response status should be 200
-    And the response should contain subcategories of parent "Cat_02"
+    And the response should contain subcategories of parent "QASeedTop"
 
   @user @malinda
   Scenario: API_CATEGORIES_USER_008 - Verify the relevant categories are sorted according to the id for users

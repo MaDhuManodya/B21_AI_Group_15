@@ -79,17 +79,20 @@ export class SalesListPage extends BasePage {
   }
 
   /**
-   * Sort by clicking the <a> inside the matching <th>.
-   * Sorting is server-side (navigates to a new URL with sortField + sortDir).
+   * Sort ascending by a column. Sorting is server-side via query params, and
+   * the header <a> TOGGLES direction based on the current sort state — so a
+   * single click is non-deterministic (it can land on desc). We navigate
+   * straight to the ascending URL instead, which deterministically sorts asc
+   * regardless of the prior state.
    */
   sortBy(column: SalesColumn) {
-    const labelMap: Record<SalesColumn, string> = {
-      plant: 'Plant',
-      quantity: 'Quantity',
-      totalPrice: 'Total Price',
-      soldAt: 'Sold At',
+    const fieldMap: Record<SalesColumn, string> = {
+      plant: 'plant.name',
+      quantity: 'quantity',
+      totalPrice: 'totalPrice',
+      soldAt: 'soldAt',
     };
-    this.headers().contains('a', labelMap[column]).click();
+    cy.visit(`${this.url}?sortField=${fieldMap[column]}&sortDir=asc`);
   }
 
   /** Read text from a column, rows in current display order. */

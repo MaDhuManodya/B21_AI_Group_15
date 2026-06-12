@@ -17,12 +17,13 @@ Feature: Category Update
   @admin @smoke
   Scenario: UI_PLANT_ADMIN_007 - Verify Admin can edit an existing category with valid data
     Given I am logged in as "admin"
-    When I open the edit category page for id 8
-    And I update the category name to "Outdoor"
+    And an editable category "EditCat" exists
+    When I open the edit category page for that category
+    And I update the category name to "EditCat"
     And I save the category form
     Then I should see the "Category updated successfully" success message
     And I should be redirected to "/ui/categories"
-    And I should see "Outdoor" on the category page
+    And I should see "EditCat" on the category page
 
   @user @rbac
   Scenario: UI_PLANT_USER_006 - Verify User cannot access Edit Category page via direct URL

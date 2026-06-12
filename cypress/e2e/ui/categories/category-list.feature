@@ -24,7 +24,7 @@ Feature: Category List
   Scenario: UI_CATEGORY_ADMIN_003 - Verify Admin can filter categories by parent
     Given I am logged in as "admin"
     And I navigate to "/ui/categories"
-    When I filter categories by parent "Indoor"
+    When I filter categories by parent "QASeedTop"
     Then the categories table should be visible
 
   @manodya @categories @ui @215550L @user @smoke @rbac

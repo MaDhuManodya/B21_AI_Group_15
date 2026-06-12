@@ -3,12 +3,42 @@
 // Step definitions for: cypress/e2e/ui/categories/category-update.feature
 // Page object: cypress/support/pages/CategoryFormPage.ts
 // ============================================================
-import { When, Then } from '@badeball/cypress-cucumber-preprocessor';
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { CategoryFormPage } from '../../support/pages/CategoryFormPage';
+import { categoriesApi } from '../../support/api/categoriesApi';
+import { jwtAuthHeader } from '../../support/api/authApi';
 
 const form = new CategoryFormPage();
 
+// Id of the category provisioned by "an editable category ... exists", shared
+// between that Given and the "for that category" When below.
+let editableCategoryId: number | undefined;
+
 When('I open the edit category page for id {int}', (id: number) => form.visitEdit(id));
+
+// Find-or-create a dedicated category to edit, so the edit test never depends
+// on a hard-coded id that may not exist (id 8 had been removed from the DB,
+// making /ui/categories/edit/8 return 500). Idempotent: reused across runs.
+Given('an editable category {string} exists', (name: string) => {
+  jwtAuthHeader('admin').then((auth) => {
+    categoriesApi.list(auth).then((res) => {
+      const cats = (Array.isArray(res.body) ? res.body : (res.body as any).content || []) as Array<{ id: number; name: string }>;
+      const found = cats.find((c) => c.name === name);
+      if (found) {
+        editableCategoryId = found.id;
+      } else {
+        categoriesApi.create(auth, { name }).then((created) => {
+          editableCategoryId = created.body.id;
+        });
+      }
+    });
+  });
+});
+
+When('I open the edit category page for that category', () => {
+  if (editableCategoryId == null) throw new Error('editable category id not set — Given step missed');
+  form.visitEdit(editableCategoryId);
+});
 When('I update the category name to {string}', (name: string) => form.setName(name));
 When('I save the category form', () => form.clickSave());
 

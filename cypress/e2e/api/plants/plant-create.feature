@@ -9,9 +9,9 @@ Feature: Plants API - Create
 
   @admin @negative @malinda
   Scenario: API_PLANT_ADMIN_006 - Verify price validation (must be > 0)
-    Given I have "admin" API credentials for plants
-    When I POST a new plant "Tulip" with price -10.0 and quantity 5 under category 8
-    Then the plant API response status should be 400
+    Given I have "admin" plants API credentials
+    When I POST a new plant "Tulip" with price -10.0 and quantity 5 under category 2
+    Then the plants API response status should be 400
 
   @admin @smoke
   Scenario: API_PLANT_ADM_001 - Admin creates a new plant record
