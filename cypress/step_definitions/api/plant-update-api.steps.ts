@@ -9,13 +9,6 @@ import { plantsApi, type PlantDto } from '../../support/api/plantsApi';
 import { state } from '../../support/scenarioState';
 import type { UserRole } from '../../support/index.d';
 
-Given('I have {string} plants API credentials', (role: string) => {
-  state.role = role as UserRole;
-  jwtAuthHeader(role as UserRole).then((auth) => {
-    state.auth = auth;
-  });
-});
-
 Given('a plant with id {int} exists', (id: number) => {
   jwtAuthHeader('admin').then((adminAuth) => {
     plantsApi.getOne(adminAuth, id).then((res) => {
@@ -87,14 +80,6 @@ Then(
     });
   }
 );
-
-Then('the plants API response status should be {int}', (expected: number) => {
-  expect(state.lastResponse?.status).to.eq(expected);
-});
-
-Then('the plants API response body name should be {string}', (expected: string) => {
-  expect((state.lastResponse?.body as PlantDto)?.name).to.eq(expected);
-});
 
 Then('the plant {int} name should be {string}', (_id: number, expected: string) => {
   const target = state.plantId;

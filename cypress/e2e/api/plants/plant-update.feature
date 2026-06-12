@@ -4,7 +4,7 @@
 # TEST IDS: API_PLANT_ADM_002
 # ============================================================
 
-@bhawanthi_pabasara @plants @api
+@plants @api
 Feature: Plants API - Update
 
   @admin @smoke @bhawanthi_pabasara
@@ -16,11 +16,8 @@ Feature: Plants API - Update
     And the response should reflect name "Z-Plant-Pabasara-Updated" price 250.0 and quantity 30
     And a subsequent GET for that plant should show name "Z-Plant-Pabasara-Updated" price 250.0 and quantity 30
     And I DELETE that plant
-    
-@tharindu @plants @api
-Feature: Plants API - Update
 
-  @admin @smoke
+  @admin @smoke @tharindu
   Scenario: API_PLANT_ADMIN_001 - Admin updates a plant via PUT
     Given I have "admin" plants API credentials
     And a plant with id 1 exists
@@ -29,7 +26,7 @@ Feature: Plants API - Update
     And the plants API response body name should be "Updated Plant"
     And the plant 1 name should be "Updated Plant"
 
-  @user @rbac
+  @user @rbac @tharindu
   Scenario: API_PLANT_USER_001 - Normal user PUT plant returns 403
     Given I have "user" plants API credentials
     And a plant with id 1 exists
