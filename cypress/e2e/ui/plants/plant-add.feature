@@ -1,5 +1,4 @@
 # ============================================================
-# OWNER: Malinda
 # MODULE: Add Plant form (/ui/plants/add)
 # SRS REFERENCE: §6.2 — Add / Edit Plant Page
 # COVERAGE NOTES:
@@ -9,12 +8,44 @@
 #   - Quantity (required, >= 0)
 #   - Cancel returns to /ui/plants
 #   - "Add a Plant" button visible only to Admin (User -> 403 if accessing /ui/plants/add)
-# TAGS: @malinda @plants @ui  + @admin|@user + @smoke/@negative/@rbac
-# REUSE: PlantFormPage.ts (add half — TODO Malinda) — Tharindu already implemented the edit half.
+# TEST IDS (Bhawanthi Pabasara, 215540G): UI_PLANT_ADM_001, UI_PLANT_ADM_002, UI_PLANT_ADM_003
+# TAGS: @bhawanthi_pabasara @plants @ui  + @admin + @smoke/@negative/@boundary
+# REUSE: PlantFormPage.ts (add half)
+#
+# REMAINING (Malinda): UI_PLANT_USER_001 — User gets 403 when accessing /ui/plants/add directly.
 # ============================================================
-@malinda @plants @ui
+@bhawanthi_pabasara @plants @ui
 Feature: Add Plant (Admin form)
 
-  # TODO Malinda: implement scenarios for the Add Plant flow here.
-  # Suggested IDs: UI_PLANT_ADMIN_001 (happy path), UI_PLANT_ADMIN_002 (form validation),
-  #                UI_PLANT_ADMIN_003 (name length 3-25), UI_PLANT_USER_001 (403 on /ui/plants/add).
+  Background:
+    Given I am logged in as "admin"
+
+  @admin @smoke
+  Scenario: UI_PLANT_ADM_001 - Admin adds a plant successfully with valid data
+    When I open the Add Plant page
+    And I fill in the plant form with name "Z-Plant-Pabasara-AddUI", category "QASeedSub", price "45.50" and quantity "12"
+    And I click Save on the plant form
+    Then I should be redirected to the plants list page
+    And I should see "Plant added successfully"
+    And I should see "Z-Plant-Pabasara-AddUI"
+    And I delete the plant "Z-Plant-Pabasara-AddUI" via the API
+
+  @admin @negative
+  Scenario: UI_PLANT_ADM_002 - Form validation when mandatory fields are empty
+    When I open the Add Plant page
+    And I click Save on the plant form
+    Then I should see the plant name validation error
+    And I should see the plant category validation error
+    And I should see the plant price validation error
+    And I should see the plant quantity validation error
+
+  @admin @negative @boundary
+  Scenario: UI_PLANT_ADM_003 - Plant Name length boundary validation (3-25 characters)
+    When I open the Add Plant page
+    And I fill in the plant form with name "AB", category "QASeedSub", price "10" and quantity "5"
+    And I click Save on the plant form
+    Then I should see the plant name length validation error
+    When I open the Add Plant page
+    And I fill in the plant form with name "ABCDEFGHIJKLMNOPQRSTUVWXYZ", category "QASeedSub", price "10" and quantity "5"
+    And I click Save on the plant form
+    Then I should see the plant name length validation error
