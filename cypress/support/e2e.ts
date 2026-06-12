@@ -2,11 +2,22 @@
 // Cypress global support file.
 // Loaded automatically before every spec by Cypress.
 // Adds: allure plugin, custom commands, fail-screenshot hook,
-//       per-scenario state reset.
+//       per-scenario state reset, DB seeding.
 // ============================================================
 import '@shelex/cypress-allure-plugin';
 import './commands';
 import { resetState } from './scenarioState';
+
+// Feed the baseline data (seed category + stocked plant + sale) before the
+// spec's scenarios run. The task is idempotent — it only creates what's
+// missing — so running it once per spec is safe and self-healing if an
+// earlier spec deleted the seed sale. Teardown happens once via after:run
+// (see cypress.config.ts). Works in both `cypress run` and `cypress open`.
+before(() => {
+  cy.task('db:seed').then((ids) => {
+    Cypress.log({ name: 'db:seed', message: JSON.stringify(ids) });
+  });
+});
 
 beforeEach(() => {
   resetState();

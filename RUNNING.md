@@ -96,6 +96,25 @@ The first run also downloads the Cypress binary — it can take a few minutes.
 
 All commands run from inside `qa-training-cypress/`.
 
+> ### 🌱 Automatic data seeding (no manual setup)
+> Several scenarios verify against **existing** data (a plant with stock, a sale
+> record). The suite now feeds that baseline automatically, so you do **not** need
+> to create anything by hand:
+>
+> - **Before** the run, a global hook ([cypress/support/e2e.ts](cypress/support/e2e.ts))
+>   calls the `db:seed` task, which creates a category tree → a stocked plant →
+>   one sale. It is **idempotent** — it only creates what's missing and tops the
+>   stock back up — so it's safe in both `cy:run` and `cy:open`.
+> - **After** a headless run, `after:run` calls `db:cleanup`, which deletes the
+>   seeded **sales**. The seed **plant + categories are reused** rather than
+>   re-created (the app's `inventory` foreign key forbids deleting a plant once it
+>   has been sold), so the footprint stays constant — it never piles up.
+> - What gets seeded lives in [cypress/fixtures/test-data.json](cypress/fixtures/test-data.json)
+>   under `"seed"`; the logic is in [cypress/support/seed/dbSeed.ts](cypress/support/seed/dbSeed.ts).
+>
+> The app must be running (Section 2) for seeding to succeed — it talks to the
+> same `http://localhost:8080` API as the tests.
+
 ### Option A — Headless (fast, for CI / full runs)
 
 | Command | What it runs |
@@ -185,6 +204,7 @@ To run the **whole group's** suite instead of just Tharindu's part, replace step
 | `bad option: --smoke-test` on `cypress verify` | Node 21/22/23 incompatibility | Switch to Node 20 LTS (`nvm use 20`). Does **not** affect `cypress run` |
 | Database connection error on app start | Wrong MySQL credentials / DB missing | Check `application.properties`; run `CREATE DATABASE qa_training;` |
 | API tests fail with 404 on endpoints | Endpoint path differs from assumption | Confirm the real path in Swagger UI and adjust the client in `cypress/support/api/` |
+| `[seed] admin login failed` / "No plants in DB" | App not running when seeding ran | Start the app (Section 2) **before** `cy:run`; seeding needs the API up |
 | Selectors not found in UI tests | App HTML differs from placeholder selectors | Inspect the running page (F12) and update the relevant Page Object in `cypress/support/pages/` |
 | Allure report is empty | No results generated yet | Run a `cy:run` command first, then `npm run report` |
 

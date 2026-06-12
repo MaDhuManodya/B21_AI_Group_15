@@ -1,8 +1,6 @@
 # ============================================================
-# OWNER: Tharindu
 # RESOURCE: PUT /api/plants/{id}
 # SRS REFERENCE: §6.2 — Edit Plant (Admin only)
-# TEST IDS: API_PLANT_ADMIN_001, API_PLANT_USER_004
 # ============================================================
 @tharindu @plants @api
 Feature: Plants API - Update
@@ -30,3 +28,4 @@ Feature: Plants API - Update
     When I PUT plant 1 with name "Valid Update Name", price 150 and quantity 30
     Then the plants API response status should be 200
     And the plants API response body name should be "Valid Update Name"
+
